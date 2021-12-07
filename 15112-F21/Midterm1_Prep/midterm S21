@@ -1,0 +1,190 @@
+from dataclasses import make_dataclass
+
+Book = make_dataclass('Book', ['title', 'chapter'])
+Chapter = make_dataclass('Chapter', ['chapter title', 'page'])
+def getPageCount():
+    return Chapter.page
+
+def getChapter():
+    return Book.chapter
+
+
+ chapterA = Chapter('I love CS!', 30) # chapter title, # of pages
+ chapterB = Chapter('So do I!', 15)
+ book1 = Book('CS is Fun!', [chapterA, chapterB]) # book title, chapters
+ book2 = Book('The Short Book', [ Chapter('Quick Read!', 5) ])
+ assert(book1.chapterCount == 2)
+ assert(book1.getPageCount() == 45)
+ assert(book2.chapterCount == 1)
+ assert(book2.getPageCount() == 5)
+ assert(book1.getChapter(0).title == 'I love CS!')
+ assert(book1.getChapter(1).title == 'So do I!')
+ assert(book2.getChapter(0).title == 'Quick Read!')
+ # Move chapter 0 from book1 to the end of book2
+ # so moveChapter always moves to the end of the target book.
+ book1.moveChapter(0, book2)
+ assert(book1.chapterCount == 1)
+ assert(book1.getPageCount() == 15)
+ assert(book1.getChapter(0).title == 'So do I!')
+ assert(book2.chapterCount == 2)
+ assert(book2.getPageCount() == 35)
+ assert(book2.getChapter(0).title == 'Quick Read!')
+ assert(book2.getChapter(1).title == 'I love CS!')
+def ct1(s):
+    r, n = '', 0
+    for t in s.upper().split(' '):
+        n += 1
+        c = chr(ord('A') + n)
+        r += f'{c}{t.count(c)}'
+    return r
+print(ct1('about baccarat wins!'))
+
+def ct2(L):
+    M = [ ]
+    for i in range(len(L)):
+        for j in range(i):
+            if (L[i] == L[j]):
+                M.append(10*i+j)
+    return M[1:] + M[:1]
+print(ct2([2,3,3,2,5,3]))
+
+def ct3(L):
+    M = sorted(L)
+    N = L
+    M.append(L.pop(0))
+    N.append(M.pop(0))
+    N = N[:2]
+    return M, N
+L = [3,1,2]
+
+M, N = ct3(L)
+print(L, M, N)
+
+from dataclasses import make_dataclass
+
+def ct4():
+    A = make_dataclass('A', ['x', 's'])
+    M = [ A(x=3,s='a'),
+          A(x=1,s='bc'),
+          A(x=4,s='de'),
+          A(x=2,s='f') ]
+    b = A(x=0, s='')
+    for a in M:
+        if a.x > b.x:
+            b.x += a.x
+        else:
+            b.s += a.s[0]
+    return [b.x, b.s]
+print(ct4())
+
+L = [2,3,5,6,3]
+M = L[:3] + [10] + L[3:]
+print(M)
+
+
+def ct1(n):
+  s = ''
+  for x in range(n, n-4, -1):
+    for y in range(n-x):
+      s += chr(ord('A') + y + n)
+    s += 'x'
+  return s
+
+
+print(ct1(4))
+
+
+def ct2(s, t):
+  for c in s:
+    if (s.count(c) > 1):
+      t += c
+  while (len(t) > 4):
+    t = t[0:-1]
+  return t
+
+print(ct2('abbdca', '6'))
+
+def nthSandwich(n):
+    guess = 0 
+    found = 0
+    while found <= n:
+        guess += 1
+        if isSandwich(guess):
+            found += 1
+    return guess
+
+def isSandwich(n):
+    prev = 0
+    while n >= 10:
+        curr = n % 10
+        if curr == prev: return False
+        n //=10
+        prev = curr
+    if n == prev: return True
+    return False
+
+def testNthSandwich():
+    assert(nthSandwich(0) == 11)
+    assert(nthSandwich(1) == 22)
+    print('passed!')
+
+testNthSandwich()
+
+def biggestRange(data):
+    score = []
+    name = ''
+    bestName = ''
+    bestScore = 0
+    for i in data.splitlines():
+        for c in i.split(","):
+            if type(c) == int:
+                score.append(c)
+            else:
+                name = str(c)
+        score = findRange(score)
+        if bestScore > score:
+            bestScore = score
+            bestName = name
+        
+        elif bestScore == score:
+            bestName = bestName + ',' + name
+    return bestName
+    
+def findRange(score):
+    curr = 0
+    best = 9999
+    for j in range(len(score)):
+        for k in range(j):
+            curr = abs(score[j]- score[k])
+            if curr < best:
+                best = curr
+    return best
+        
+
+
+def ct1(x):
+ j = c = 0
+ for i in range(x):
+    while j < 2*i:
+        j += i
+        c += 1
+        if (i**i == j): continue
+        print(i, j)
+ return c
+
+print(ct1(5))
+
+import copy
+def ct2(L):
+ a = L
+ b = copy.copy(L)
+ c = copy.deepcopy(L)
+ a[1][0] += 2
+ b[0] = a[1] * 2
+ a[0][0] += a.pop()[0]
+ b[1] = c[0]
+ return b
+
+L = [[1],[2, 3]]
+print(ct2(L))
+print(L) 

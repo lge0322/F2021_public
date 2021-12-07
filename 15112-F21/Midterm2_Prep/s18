@@ -1,0 +1,162 @@
+class A(object):
+    def __init__(self,x):
+        self.x = "A:" + x
+    def __repr__(self):
+        return "A(" + str(self.x) + ")"
+    def append(self, n):
+        self.x += str(n)
+        return self.x
+class B(A):
+    def __init__(self, x, y):
+        super().__init__(x)
+        self.y = int(y)
+    def sub(self):
+        self.x = self.x[:-self.y]
+        return self
+def ct1():
+    try:
+        a, b = A("q"), B("r", "2")
+        print(a)
+        print(b)
+        print(b.append(6))
+        print(b.sub())
+        print("All good")
+    except:
+        print("Uh oh!")
+ct1()
+
+def fRetG(x):
+    print("fRetG")
+    return x // 2
+def myFunc(x):
+    print(x)
+    if x < 0:
+        return 0
+    elif x == 1:
+        return 1
+    else:
+        return x + myFunc(x - 5)
+def ct2(x):
+    print("ret =", myFunc(fRetG(x)))
+ct2(32)
+
+def mostPopularCities(cityMap):
+    res = dict()
+    for name in cityMap:
+        city = cityMap[name]
+        res[city] = cityMap.get(city, 0) + 1
+    best = 0
+    bestCity = set()
+    for city in cityMap:
+        if cityMap[city] > best:
+            best = cityMap[city]
+            bestCity.add(city)
+    return bestCity
+
+
+
+class Vehicle(object):
+    def __init__(self, name, capacity):
+        self.name = name
+        self.capacity = capacity
+        self.list = []
+        self.state = True
+    
+    def __repr__(self):
+        return f"{self.name} holds {self.capacity}: {self.list}"
+    
+    def addPassenger(self, name):
+        self.list.append(name)
+        if len(self.list) <= self.capacity:
+            return True
+        else:
+            self.list.remove(name)
+            return False
+
+    def removePassenger(self):
+        if len(self.list) == 0: return False
+        self.list.pop()
+        if len(self.list) <= self.capacity:
+            return self.state
+    
+    def __eq__(self, other):
+        return isinstance(other, Vehicle) and self.name == other.name
+
+class Buggy(Vehicle):
+    def __init__(self, name, capacity = 1):
+        super().__init__(name, capacity)
+        self.state = True
+    
+    def startPushing(self):
+        self.state = False
+    
+    def stopPushing(self):
+        self.state = True
+ 
+    
+
+
+        
+        
+        
+def test():
+    v1 = Vehicle("Paddleboat", 2)
+    assert(str(v1) == "Paddleboat holds 2: []")
+    # passengers can be added
+    assert(v1.addPassenger("Ken") == True)
+    assert(v1.addPassenger("Nina") == True)
+    # can't add passengers past the max capacity
+    assert(v1.addPassenger("Beatrix") == False)
+    print(str(v1))
+    assert(str(v1) == "Paddleboat holds 2: ['Ken', 'Nina']")
+    # can remove the most recent passenger
+    assert(v1.removePassenger() == True)
+    
+    assert(str(v1) == "Paddleboat holds 2: ['Ken']")
+    assert(v1.addPassenger("Beatrix") == True) # that frees up space!
+    v2 = Vehicle("Bus", 20)
+    # can't remove a passenger from an empty vehicle
+    assert(v2.removePassenger() == False)
+    assert(v2 == Vehicle("Bus", 20))
+    assert(v2 != v1)
+    assert(v2 != "Bus") # should not crash!
+    # a buggy is a vehicle with a name and an assumed capacity of 1
+    b1 = Buggy("SDC Buggy")
+    assert(b1.addPassenger("Driver") == True)
+    assert(str(b1) == "SDC Buggy holds 1: ['Driver']")
+    # a buggy knows whether it's currently being pushed
+    b1.startPushing()
+    # while it's being pushed, you can't remove passengers
+    # don't worry about adding passengers while pushing
+    assert(b1.removePassenger() == False)
+    b1.stopPushing()
+    # when the buggy is stopped, normal rules apply
+    #assert(b1.removePassenger() == True)
+    assert(b1.removePassenger() == False)
+    print('passed!')
+test()
+
+def oddPerfectSquarePrefixes(d):
+    lst = [1,2,3,4,5,6,7,8,9]
+    #return an integer value
+    return helper(d, lst, "")
+
+def helper(d, lst, res):
+    if d == 0: 
+        print(res)
+        return int(res)
+    else:
+        for val in lst:
+            if val**0.5 == int:
+                res += str(val)
+                solution = helper(d-1, lst, res)
+                if solution != None:
+                    return solution
+                else:
+                    res.replace(val, "")
+    return None
+
+def test():
+    assert(oddPerfectSquarePrefixes(3) == 169)
+    print('passed!')
+test()

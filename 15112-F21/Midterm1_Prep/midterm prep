@@ -1,0 +1,147 @@
+def appStarted(app):
+    app.radius = 100
+    app.color = ['red', 'blue', 'green']
+    app.cx = app.width /2
+    app.cy = app.height /2 
+    app.colorIndex = 0
+    app.dots = []
+    app.dotR = 10
+    app.score = 0
+
+def keyPressed(app, event):
+    if event.key == "m":
+        app.cx += 30
+        if app.cx > app.width: 
+            app.cx = app.width /2 
+
+def mousePressed(app, event):
+    app.dots.append((event.x, event.y))
+
+def timerFired(app):
+    app.colorIndex = (app.colorIndex + 1) % 3
+    newDots = []
+    for dotX, dotY in app.dots:
+        if not circleIntersect(dotX, dotY, app.cx, app.cy, app.r)):
+            newDotY = dotY - app.dotR
+            if 0 <= newDotY < app.height:
+                newDots.append(dotX, newDotY)
+        else:
+            app.score += 1
+    app.dots = newDots
+
+def drawCircle(app, canvas):
+
+    canvas.create_oval()
+
+def redrawAll(app, canvas):
+    drawCircle(app, canvas)
+
+
+def nthJespr(n):
+    guess = 0
+    found = 0
+    while found <= n:
+        guess += 1
+        if isJespr(guess):
+            found += 1
+    return guess
+
+def isJespr(n):
+    if n < 1000: return False
+    best =-1
+    while n >= 1000:
+        lastFourDigits = n % 10000
+        if lastFourDigits > best:
+            best = lastFourDigits
+        n //= 10
+    return isPrime(best)
+
+def mineSweeper(L):
+    result = [[0 for i in range(len(L[0]))] for j in range(len(L))]
+
+    for r in range(len(L)):
+        for c in range(len(L[0])):
+            if L[r][c] == 1:
+                result[r][c] = "X"
+            else:
+                result[r][c] = countNeighborMines(L, r,c)
+    return result
+
+def countNeighborMines(L, r, c):
+    count = 0
+    for drow in (-1, 0, 1):
+        for dcol in (-1, 0, 1):
+            if drow == dcol == 0: continue
+            newRow, newCol = r+ drow, r + dcol
+            if 0<= newRow < len(L) and 0 <= newCol < len(L[0]):
+                if L[newRow][newCol] == 1:
+                    count += 1
+    return count
+
+def lockerProblem(lockers):
+    isOpen = [False] * (lockers + 1)
+    students = lockers
+    for student in range(1, students+1):
+        for locker in range(student, lockers+1, student):
+            isOpen[locker] = not isOpen[locker]
+    openLockers = [ ]
+    for locker in range(1, lockers+1):
+        if isOpen[locker]:
+            openLockers.append(locker)
+    return openLockers
+print(lockerProblem(2000))
+
+def multiplyRecipe(recipe, factor):
+    newRecipe = ""
+    for line in recipe.splitlines():
+        plural = False
+        newLine = ""
+        for word in line.split(" "):
+            if word.isdigit():
+                newNum = int(word) * factor
+                if newNum > 1 and int(word) == 1:
+                    plural = True
+                newLine += str(newNum) + " "
+            else:
+                if plural:
+                    newLine += word + "s "
+                    plural = False
+                else:
+                    newLine += word + " "
+    newRecipe += newLine.strip() + "\n"
+    return newRecipe.strip()
+
+def longestIncreasingDigitStreak(n):
+    bestStreak = None
+    bestStreakLength = 0
+    currentStreak = 0
+    currStreakLength = 0
+    prevDigit = 0
+
+    while n > 0:
+        currentDigit = n % 10
+        if currentDigit == prevDigit - 1:
+            currentStreak += currentDigit * 10 ** currStreakLength
+            currStreakLength += 1
+        else:
+            currentStreak = currentDigit
+            currStreakLength = 1
+        
+        if currStreakLength > bestStreakLength:
+            bestStreakLength = currStreakLength
+            bestStreak = currentStreak
+        elif currStreakLength==bestStreakLength and currentStreak > bestStreak:
+            bestStreak = currentStreak
+        
+        prevDigit = currentDigit
+        n//=10
+    
+    return bestStreak
+
+def test1():
+    assert(longestIncreasingDigitStreak(15112) == 12)
+    assert(longestIncreasingDigitStreak(12333333212) == 123)
+    assert(longestIncreasingDigitStreak(12316789) == 6789)
+    print('passed!')
+test1()
+

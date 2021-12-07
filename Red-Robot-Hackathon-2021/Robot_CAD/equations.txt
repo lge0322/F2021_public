@@ -1,0 +1,5 @@
+﻿"wood"= 2.95mm
+"slot_width"= 10mm
+"slot_offset"= 10mm
+"nut_width"= 5.3mm
+"nut_height"= 2.3mm

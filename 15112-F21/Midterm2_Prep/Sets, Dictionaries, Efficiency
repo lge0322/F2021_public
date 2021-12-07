@@ -1,0 +1,175 @@
+'''
+sets
+
+- "in": O(1)
+s = set()
+s = {1,2,3}
+s = {} --> creates a dictionary, not a set
+
+.append(elem) for lists, .add(elem) for sets
+.remove(elem) for set
+
+s = set()
+s.add(1)
+s.add(["oops"]) --> cannot add mutable objects
+members of set must be immutable
+
+s = {1,2,3}
+s.add(1)
+print(s) --> prints {1,2,3}
+
+sets are unordered --> cannot index
+s[0] not possible
+
+'''
+
+'''
+Dictionaries
+
+d = {}
+d = dict()
+d = {a:b, c:d}
+d = dict(pairs) where pairs is a list of (key, value) pairs
+pairs = [(a,b), (c,d)]
+
+dictionaries map keys to values
+keys must be: unique and immutable
+values: unrestricted, there can be duplicate values, and they can be mutable
+
+efficiency for d[key] lookup is O(1)
+d.get(key, default value)
+
+d = [1:12, 'hello':'world']
+d.get('hello', None) --> 'world'
+d.get('no', None) --> None
+
+if 'hello' in d:
+    print("yes")
+
+'''
+
+#Efficiency
+
+def bigOhNo(M):
+    for i in range(len(M)): #O(N)
+        for j in range(len(M)): #O(N)
+            M[i][j] = M[j][i] #O(1)
+
+
+
+#Overall = O(N) * O(N) -> O(N**2)
+
+def bigOhYes(L,s): #N = len(L)
+    res = 0 #O(1)
+    L = set(L) #O(N)
+    for elem in s: #O(N)
+        if elem in L: #O(1)
+            res += elem #O(1)
+    return res #O(1)
+
+#Overall = O(1) + O(N) + O(N) * [O(1)+O(1)]+ O(1)
+# = O(N)
+
+
+#creating an empty set = o(1)
+
+
+def bigOhWow(L):
+    isReverse = False #O(1)
+    for i in range(len(L)): #O(n)
+        for j in range(len(L)): #O(n)
+            L.sort(reverse = isReverse) #O(nlogn)
+            isReverse = not isReverse #O(1)
+
+#overall = O(n**3logn)
+
+'''
+Efficiency Short Answer
+'''
+
+def sortishCount(L): #L is a list of length n
+    total = 0 #O(1)
+    for elem in L: #O(N)
+        L[0] += elem #O(1)
+        L.sort() #O(nlogn)
+        total += L.count(elem) #O(n)
+
+    return total #O(1)
+
+#Overall = O(n**2logn)
+
+'''
+If a list L takes 5 seconds to sort using selection sort, how long
+would we expect the list L*4 to sort using selection sort
+
+'''
+
+'''
+Most Common Name
+
+Write the function mostCommonName(a) that takes in a list of names and returns
+the name that appears the most nubmer of times. If there is more than one name that 
+appears the most number of times, the function should return all such names in a list
+
+For example, 
+If a = ["Jane", "Aaron", "Cindy", "Aaron"], mostCommonName(a) returns "Aaron".
+If a =[], most CommonName(a) returns None
+
+Your solution should be in O(n), where n is the length of the input list a
+
+'''
+
+def mostCommonName(a):
+    if a == []: return None
+    res = dict()
+    for name in a:
+        res[name] = res.get(name, 0) + 1
+    bestCount = 0
+    bestNames = set()
+    for name in res:
+        curCount = res[name]
+        if curCount > bestCount:
+            bestNames = set([name])
+            bestCount = curCount
+        elif curCount == bestCount:
+            bestNames.add(name)
+    if len(bestNames) == 1:
+        return bestNames.pop()
+    return list(bestNames)
+
+
+'''
+Write the function qualifyingPlayers(s, scoreToBeat) which takes in a multi-line
+string s where each line contains a player, and a score to beat and returns a set 
+containing all of the players whose scores summed together is strictly greater than scoreToBeat
+
+for example, if we have
+
+s = Jake 10
+    Jake -5
+    Sara 5
+    Joe 3
+    Sara 7
+    David 15
+    Bod -3
+
+qualifyingPlayers(s, 5) == {'Sara', 'David'} because Sara  has a score of 12 in total
+and David has a score of 15 in total, both of which are greater than 5
+
+
+'''
+
+def qualifyingPlayers(s, scoreToBeat):
+    scores = dict()
+    for line in s.splitlines():
+        info = line.split(" ")
+        player, score = info[0], info[1]
+        if player not in scores:
+            scores[player] = score
+        else:
+            scores[player] += int(score)
+    result = set()
+    for player in scores:
+        if scores[player] > scoreToBeat:
+            result.add(player)
+    return result

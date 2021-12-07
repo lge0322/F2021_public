@@ -1,0 +1,53 @@
+Example: PacMan
+
+- Board(basic maze)
+- Pac-Man movement
+
+
+
+Board(basic maze)
+Woodboy and MetalGirl's movements
+Movements of obstacles 
+Maze generation 
+AIs
+
+- Import files
+
+- Git (version control)
+
+The practice of tracking changes to a repository of code
+Save snapshots of your code at various stages of progess
+Better than:
+    copy-pasting code
+    emailing the code to yourself
+    taking a picture of the code
+
+Terminology
+
+- Repository
+    Your codebase: saved to a folder on your computer. Also backed up to Github
+
+- Branch
+    -one continually upadated version of your repository
+    - It begins with just the master of main branch - you can add more branches 
+    = Useful for prototyping parts of a project without having to make changes to the 
+    stable version on the master branch
+
+- Commit
+    A snapshot of your code at a certain point in time. Tracks the changes to your code since the previous commit
+
+
+Git Commands:
+    - init (initalize a new repository)
+    - clone <url> (Download a repository from the internet to your computer)
+    - Status (view current status of the repo. Very important!)
+    - commit -m <descriptive commit message> - Save a snapshot of your current repository, with changes from the preivous commit
+    - add <specific file or folder, or just . to add all> - Add changes 
+    from selected files to be committed next time your make a commit
+    - push - upload your commits to the remote repository (Github)
+    - fetch - check the remote repository (gitbhub) to see if there were any new commits
+    - pull - download the latest version of the repository from github, preserving any changes 
+    to files on your local machine
+    - branch <new branch name> make a new branch from the current branch
+    - Checkout < branch name> switch to a different branch in the repository
+    

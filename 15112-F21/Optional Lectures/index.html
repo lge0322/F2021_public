@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<title>JS Demo</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Imports a bunch of stylesheets for this template -->
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-black.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<!-- This is some actual CSS code written into the HTML file itself -->
+<style>
+html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
+.w3-sidebar {
+  z-index: 3;
+  width: 250px;
+  top: 44px;
+  bottom: 0;
+  height: inherit;
+}
+code {
+    display: block;
+    background-color: #f5f5f5;
+    border-radius: 3px;
+    font-family: courier, monospace;
+    padding: 0 3px;
+}
+</style>
+<!-- This is some actual JS code written into the HTML file itself -->
+<script>
+    // Get the Sidebar
+    var mySidebar = document.getElementById("mySidebar");
+    
+    // Get the DIV with overlay effect
+    var overlayBg = document.getElementById("myOverlay");
+    
+    // Toggle between showing and hiding the sidebar, and add overlay effect
+    function w3_open() {
+      if (mySidebar.style.display === 'block') {
+        mySidebar.style.display = 'none';
+        overlayBg.style.display = "none";
+      } else {
+        mySidebar.style.display = 'block';
+        overlayBg.style.display = "block";
+      }
+    }
+    
+    // Close the sidebar with the close button
+    function w3_close() {
+      mySidebar.style.display = "none";
+      overlayBg.style.display = "none";
+    }
+    </script>
+    
+<!-- Everything in the body tag is where the physical objects are -->
+<body>
+
+<!-- Navbar -->
+<div class="w3-top">
+  <div class="w3-bar w3-theme w3-top w3-left-align w3-large">
+    <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hover-white w3-large w3-theme-l1" href="javascript:void(0)" onclick="w3_open()"><i class="fa fa-bars"></i></a>
+    <a href="index.html" class="w3-bar-item w3-button w3-theme-l1">Javascript Demo Website</a>
+    <a href="hello.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Hello</a>
+    <a href="events.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Events</a>
+    <a href="words.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Words</a>
+    <a href="objects.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Objects</a>
+    <a href="functions.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Functions</a>
+    <a href="patterns.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Patterns</a>
+    <a href="summary.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">JS Summary</a>
+  </div>
+</div>
+
+<!-- Sidebar -->
+<nav class="w3-sidebar w3-bar-block w3-collapse w3-large w3-theme-l5 w3-animate-left" id="mySidebar">
+  <a href="javascript:void(0)" onclick="w3_close()" class="w3-right w3-xlarge w3-padding-large w3-hover-black w3-hide-large" title="Close Menu">
+    <i class="fa fa-remove"></i>
+  </a>
+  <h4 class="w3-bar-item"><b>Some Fun Links</b></h4>
+  <a class="w3-bar-item w3-button w3-hover-black" href="https://www.cs.cmu.edu/~112/">112 Website</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="https://www.w3schools.com/js/default.asp">W3Schools JS Guide</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="https://www.w3schools.com/w3css/w3css_templates.asp">W3 CSS Templates</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="https://www.youtube.com/watch?v=Xw1C5T-fH2Y">More Cute Dogs</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="https://en.wikipedia.org/wiki/Axolotl">Axolotl Wiki Page</a>
+</nav>
+<div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+<div class="w3-main" style="margin-left:250px">
+
+  <!-- The "main" part of the page -->
+
+  <div class="w3-row w3-padding-64">
+    <div class="w3-twothird w3-container">
+      <!-- The big heading text -->
+      <h1 class="w3-text-teal">This is a web page</h1>
+
+      <!-- The text sections -->
+      <p>
+        HTML (Hypertext Markup Language) is a markup language (as opposed to a 
+        programming langauge). Its purpose is to design documents that will be 
+        rendered by a web browser as a web page, like this one! Every component 
+        on this page (the navigation bars, the header text, the GIF to the right, 
+        this text) is all contained within various tags. Consider the HTML code below:
+      </p>
+      
+      <pre>
+      <code>
+        &ltp&gtThis is &ltb&gtSO COOL!&ltb&gt&lt/p&gt
+        &lta href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"&gtThis is a link&lt/a&gt
+      </code>
+      </pre>
+
+      <p>There are 3 tags inside of that snippet: 
+        <ul>
+          <li>The p tag represents a paragraph. Text is usually stored inside of these.</li>
+          <li>The b tag means that whatever text is inside of this tag will be bolded.</li>
+          <li>The a tag is a link to another web page (or another location within this page. 
+              This tag also has an attribute called href. Each tag can have a bunch of attributes.
+              In this case, the value of the href attribute indicates where the link should go 
+              to when clicked.</li>
+        </ul>
+      The list above was written inside of an ul tag (short for unordered list). 
+      Each element of that list was written inside of an li tag (short for list element).
+      </p>
+      <p>
+      Circling back: suppose we actually wrote the html code snippet above into a web page. 
+      We would see the two lines directly below:
+      </p>
+
+        <p>This is <b>SO COOL!</b></p>
+        <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">This is a link</a>
+
+      <p>
+      Now writing an entire web page using just HTML would be tedious and ugly. 
+      HTML is often paired with 2 other languages: CSS and JS.
+      </p>
+
+      <p>
+      CSS (Cascading Style Sheets) is used to describe what HTML elements should look like.
+      CSS stylesheets are usually imported into an HTML document at the top. They contain
+      specifications for how specific tags, classes, or IDs should be stylized.
+      Below are two snippets of CSS code. The first specifies that all p tags should use the font
+      Lucida Console, and the second specifies all tags with a class attribute of "swag" should have
+      white text and a blue background. 
+      </p>  
+      <pre>
+      <code>
+        p {
+          font-family: "Lucida Console", "Courier New", monospace;
+        }
+
+        .swag {
+          background-color: blue;
+          color: white;
+        }
+      </code>
+      </pre>
+
+      <p>
+      In fact, in order to display the CSS code shown above, an html code tag was
+      used. This code tag had been stylized by CSS so that it would have a background 
+      color of #f5f5f5 (very light grey), text font of courier, and several other properties.
+      </p>
+
+      <p>
+      CSS can control basically anything about how your page elements should look, including:
+      <ul>
+        <li>Font family, weight, size, color</li>
+        <li>Element width, height, text alignment, margins, padding</li>
+        <li>Borders, background colors/images</li>
+        <li>What bullet points should lists use</li>
+        <li>How should elements move/resize when the page resizes</li>
+        <li>How elements appearences should change when hoverd/clicked on</li>
+        <li>Table borders, cell dimensions, cell color</li>
+        <li>A bunch of even more interesting things</li>
+      </ul>
+      It is common practice for websites to either start out as a downloaded HTML/CSS template
+      with the styling pre-written, or to import CSS from a library online, or both. In fact,
+      this page was written with a template that imported TONS of CSS. If a lines 8-28 of
+      this HTML file are commented out, you can see what this page looks like without the CSS.
+      </p>
+
+      <p>
+      JS (short for JavaScript) is a language much closer to Python. Some of its syntax looks
+      C/C++-esque, but most of its features are extremely similar to Python. Python is better
+      for writing large programs, but JS is better for web development because it is so
+      easily integrated with HTML. The way this is often phrased in industry is that Python
+      is often used for back-end development (everything that users don't see) and Javascript
+      is often used for front-end development (everything that they do see).
+      </p>
+
+      <p>
+        The rest of this website is dedicated to demonstrating some of JS's features and functionality,
+        including its interactions with HTML code. Click on the 7 links on the navigation bar on the
+        top of this page to see these examples in action.
+      </p>
+
+    </div>
+
+    <!-- The GIF on the side -->
+    <div class="w3-third w3-container">
+      <p class="w3-border w3-padding-large w3-padding-32 64-center"><img src="https://c.tenor.com/CotXUeUA978AAAAM/sleepy-tired.gif" width=100%></p>
+    </div>
+  </div>
+
+  <!-- Footer of the web page -->
+  <footer>
+    <div class="w3-container w3-theme-l1">
+      <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a></p>
+    </div>
+  </footer>
+
+</div>
+
+</body>
+</html>

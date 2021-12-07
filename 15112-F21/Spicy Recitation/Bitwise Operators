@@ -1,0 +1,148 @@
+################################################################################
+
+# Demo 1
+
+################################################################################
+#The binary representation of 42
+#print(0b101010)
+#Here, 0b represents an ascii value
+
+#Converts the int 42 to a string
+#print(bin(42))
+
+#Converts the string 101010 to an int, assuming its base 2
+#print(int("101010", base = 2))
+'''
+Discuss: Bitwise Operators
+
+There are several artihmetic operators that we are more familir with
+
+1. Addition (x+y)
+2. Substraction (x-y)
+3. Multiplication (x*y)
+4. Division (x/y)
+5. Exponentiation (x**y)
+6. Modulus (x%y)
+7. Integer Division (x//y)
+
+And there are several other operators available in Python
+
+1. Bitwise-AND (x & y)
+2. Bitwise-OR (x | y)
+3. Bitwise-XOR (x ^ y)
+4. Bitwise-LeftShift(x << y)
+5. Bitwise-RightShift(x >> y)
+
+'''
+
+################################################################################
+
+#Demo 2
+
+################################################################################
+
+print("42: ", bin(42))
+print("37: ", bin(37))
+print("And: ", bin(42 & 37))
+print("Or: ", bin(42 | 37))
+print("XOr: ", bin(42 ^ 37))
+print("L1: ", bin(42 << 1)) #left-shift: multiply by 2
+print("L2: ", bin(42 << 2) ) #left-shift: multiply by 2 ** 2
+print("R1: ", bin(42 >> 1)) #right-shift: divde by 2
+print("R2: ", bin(42 >> 2) ) #right-shift: divide by 2 ** 2
+
+'''
+some problems with bitwise operators
+
+1. getKthBit(n, k) returns the kth bit of n, where the 0th bit is the rightmost
+2. flipKthBit(n, k) returns a version of n but where the kth bit is flipped
+3. setKthBit(n, k, b) returns a version of n where the kth bit is set to b
+
+0b1101 if k == 2
+0b1001
+
+
+
+'''
+
+def getKthBit(n, k):
+    return (n >> k) & 1 #1 == 0000001 
+
+def flipKthBit(n, k):
+    return n ^ (1 << k)
+
+def setKthBit(n, k, b):
+    if getKthBit(n ,k) == b:
+        return n
+    else:
+        return flipKthBit(n, k)
+
+'''
+Using bitwise operators to do some artihemetic
+
+This is sort of what happens behind the scenes with the normal artihmetic appro
+
+&
+|
+^
+<<
+>>
++
+-
+
+For snaity sake, the + and - operators are also allowed from these problems
+
+1. times6Point5(n) returns n multipled by 6.5 (ints only)
+
+
+'''
+def times6Point5(n):
+    return (n << 3) - (n << 1) + (n >> 1)
+
+def isPowerOfTwo(n):
+    return (n & (n-1)) == 0
+
+def testTimes6Point5():
+    assert(times6Point5(0) == 0)
+    assert(times6Point5(1) == 6)
+    assert(times6Point5(2) == 13)
+    assert(times6Point5(3) == 19)
+    print('passed!')
+testTimes6Point5()
+
+def testGetKthBit():
+    #153 = 0b10011001
+    assert(getKthBit(153, 0) == 1)
+    assert(getKthBit(153, 1) == 0)
+    assert(getKthBit(153, 2) == 0)
+    assert(getKthBit(153, 3) == 1)
+    assert(getKthBit(153, 4) == 1)
+    assert(getKthBit(153, 5) == 0)
+    assert(getKthBit(153, 6) == 0)
+    assert(getKthBit(153, 7) == 1)
+    assert(getKthBit(153, 8) == 0)
+    print('passed!')
+testGetKthBit()
+
+def testFlipKthBit():
+    #153 = 0b10011001
+    assert(flipKthBit(153, 0) == 152) #0b10011000
+    assert(flipKthBit(153, 1) == 155)
+    assert(flipKthBit(153, 2) == 157)
+    assert(flipKthBit(153, 3) == 145)
+    assert(flipKthBit(153, 4) == 137)
+    assert(flipKthBit(153, 5) == 185)
+    assert(flipKthBit(153, 6) == 217)
+    assert(flipKthBit(153, 7) == 25)
+    assert(flipKthBit(153, 8) == 409)
+    print('passed!')
+testFlipKthBit()
+    
+def testSetKthBit():
+    assert(setKthBit(153, 0, 0) == 152)
+    assert(setKthBit(153, 1, 0) == 153)
+    assert(setKthBit(153, 2, 0) == 153)
+    assert(setKthBit(153, 3, 0) == 145)
+    print('passed!')
+testSetKthBit()
+

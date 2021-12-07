@@ -1,0 +1,214 @@
+'''
+OOP
+
+1. What is the main purpose of classes?
+
+    - Classes let us create custom objects that are designed to fit our needs!
+    - They contain methods and attributes that are unique to the class
+
+2. We can preload a class with a constructor, using the __init__ method
+3. Attributes are variables that are specific to the class
+4. Methods are functions that are defined only for a specific class
+5. We access methods and attributes with the name of the object and a period.
+    -Eg, dog.name
+    - We add parenthesis if we are calling a method, and put our parameters 
+    inside the parentheses if we have any Eg. dog.bark() --> methods, dog.bark --> attributes
+
+'''
+
+class Person(object):
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+    
+    def getAge(self, age):
+        self.age = age
+        return age
+
+    def __repr__(self):
+        return str(self.name)
+
+class Family(object):
+    def __init__(self, family, familyCount):
+        self.familyCount = familyCount
+        self.family = family
+        self.originalCount = familyCount
+
+    def addAge(self, name):
+        if name not in self.family:
+            self.family[name] = 0
+            self.familyCount += 1
+        else: self.family[name] += 1
+    
+    def getAge(self, name):
+        if name in self.family:
+            age = self.family[name]
+            return f'{name} is {age} years old!'
+        else:
+            return f'{name} is not in my family ):'
+
+    def getFamilyGrowth(self):
+        diff = self.familyCount - self.originalCount 
+        return f'Our family grew by {diff} members!'
+
+def testFamilyClass():
+    print("Testing family class...", end="")
+    d = {'Prithvi': 50, 'Jake': 45, 'Kosbie': 25, 'Mike':20}
+    fam = Family(d, len(d))
+    assert(fam.familyCount == 4)
+    assert(fam.family == d)
+    fam.addAge('Kosbie')
+    print(fam.getAge('Kosbie'))
+    assert(fam.getAge('Kosbie') == 'Kosbie is 26 years old!')
+
+    assert(fam.getAge('Sara')== 'Sara is not in my family ):')
+    fam.addAge('Sara')
+    assert(fam.getAge('Sara')== 'Sara is 0 years old!')
+    assert(fam.familyCount == 5)
+
+    assert(fam.getFamilyGrowth() == 'Our family grew by 1 members!')
+    print('Passed!')
+
+testFamilyClass()
+
+class Word(object):
+    def __init__(self, word):
+        self.word = ""
+        for char in word.lower():
+            if char.isalpha():
+                self.word += char
+        
+    def __repr__(self):
+        return self.word
+
+    def __eq__(self, other):
+        return isinstance(other, Word) and self.word == other.word
+
+    def __hash__(self):
+        return hash(self.word)
+    
+class Thesaurus(object):
+    def __init__(self):
+        self.table = {}
+
+    def getSynonyms(self, word):
+        return self.table.get(word, set())
+    
+    def getAllSynonyms(self):
+        return self.table
+
+    def addSynonyms(self, word1, word2):
+        if word1 not in self.table:
+            self.table[word1] = set()
+        if word2 not in self.table:
+            self.table[word2] = set()
+        self.table[word1].add(word2)
+        self.table[word2].add(word1)
+
+    def getallSynonyms(self):
+        return self.table
+    
+def testWordAndThesaurus():
+    print("testing words and thesaurus...", end="")
+
+    w1 = Word("myriad")
+    w2 = Word("plethora")
+    w3 = Word("infinity")
+    w4 = Word("eternity")
+    w5 = Word("MuLtI tUdE! 42")
+
+    assert(repr(w1) == 'myriad')
+    assert(repr(w5) == "multitude")
+    assert(w1 == Word("myriad"))
+    assert(w1 != "myriad")
+    assert(w1 != w2)
+    assert(w5 == Word("multitude"))
+
+
+    T = Thesaurus()
+
+    assert(T.getSynonyms(w1) == set())
+    assert(T.getAllSynonyms() == {})
+    
+    T.addSynonyms(w1, w2)
+    T.addSynonyms(w2, w5)
+    T.addSynonyms(w3, w4)
+
+    assert(T.getSynonyms(w1) == {w2})
+    assert(T.getSynonyms(w2) == {w1, w5})
+    assert(T.getSynonyms(w3) == {w4})
+
+    assert(T.getallSynonyms() == {
+        Word("myriad"): {Word("plethora")}, 
+        Word("plethora"): {Word("myriad"), Word("multitude")},
+        Word("multitude"): {Word("plethora")},
+        Word("infinity"): {Word("eternity")},
+        Word("eternity"): {Word("infinity")}})
+    print("passed!")
+testWordAndThesaurus()
+
+
+class Paint(object):
+    def __init__(self, red, green, blue):
+        self.r = red
+        self.g = green
+        self.b = blue
+
+    def __repr__(self):
+        return f'({self.r},{self.g},{self.b})'
+
+    def __eq__(self, other):
+        if isinstance(other, str):
+            return str(self) == other
+        elif isinstance(other, Paint):
+            return (self.r == other.r and 
+                self.g == other.g and self.b == other.b)
+        else:
+            return False
+
+    def mixPaints(self, other):
+        newR = (self.r+other.r) //2
+        newG = (self.g+other.g) // 2
+        newB = (self.b+other.b) //2
+        return Paint(newR,newG,newB)
+
+
+class UltraVioletPaint(Paint):
+    def __init__(self, red, green, blue, nRed, nGreen, nBlue):
+        super().__init__(red, green, blue)
+        self.ultraR = nRed
+        self.ultraG = nGreen
+        self.ultraB = nBlue
+    
+    def blackLight(self):
+        self.r = self.ultraR
+        self.g = self.ultraG
+        self.b = self.ultraB
+
+def testPaintClasses():
+    print("Testing Paint Classes", end="")
+    CandyApple = Paint(255,28,16)
+    Burgundy = Paint(151,16,51)
+    Sapphire = Paint(16,82,186)
+    Turkish = Paint(79,151,163)
+
+    assert(str([CandyApple, Burgundy]) == "[(255,28,16), (151,16,51)]")
+    assert(CandyApple != Burgundy != Sapphire != Turkish)
+    assert(CandyApple != [42])
+    assert(CandyApple == Paint(255,28,16))
+    assert(CandyApple == "(255,28,16)")
+    assert(CandyApple != "#971033")
+
+    TurkishCandyApple = CandyApple.mixPaints(Turkish)
+    assert(TurkishCandyApple == Paint(167,89,89))
+
+    LavenderSapphire = UltraVioletPaint(115,79,150,16,82,186)
+    assert(isinstance(LavenderSapphire, Paint))
+    assert(str(LavenderSapphire) == "(115,79,150)")
+    assert(LavenderSapphire != Sapphire)
+
+    LavenderSapphire.blackLight()
+    assert(str(LavenderSapphire) == "(16,82,186)")
+    assert(LavenderSapphire == Sapphire)
+    print('Passed!')
+testPaintClasses()

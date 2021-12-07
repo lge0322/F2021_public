@@ -1,0 +1,223 @@
+################################################################################
+
+#Demo 1
+
+################################################################################
+
+def finiteRange(start, stop, step):
+    i = start
+    while i < stop:
+        yield i 
+        i += step
+
+#return kills a function
+#yield instead pauses a function
+#then restarts the function to look at the next value
+    
+for i in finiteRange(5, 25, 5):
+    print(i)
+
+################################################################################
+
+#Demo 2
+
+################################################################################
+
+def infiniteRange(start, step):
+    i = start
+    while True:
+        yield i
+        i += step
+
+for i in infiniteRange(0, 10):
+    print(i)
+    if i >= 100:
+        break
+
+################################################################################
+
+#Demo 3
+
+################################################################################
+
+f = finiteRange(0, 10, 2)
+print(next(f))
+print(next(f))
+print(next(f))
+print(next(f))
+print(next(f))
+
+#unpauses the generator until the generator yields
+#next(f) reiterates the function
+
+#if calling a value out of the range in generator, the code will crash!
+
+'''
+Now let's write some simple generators:
+
+1. triangle() (infinitely) yields triangle numbers (1, 3, 6, 10, 15, 21, 28....)
+'''
+
+def triangle():
+    counter = 1
+    total = 1
+    while True:
+        yield total #pauses the function until we calls the function again
+        counter += 1
+        total += counter
+    
+def testTriangle():
+    t = triangle()
+    assert(next(t) == 1)
+    assert(next(t) == 3)
+    assert(next(t) == 6)
+    assert(next(t) == 10)
+    assert(next(t) == 15)
+    assert(next(t) == 21)
+    assert(next(t) == 28)
+    print('passed!')
+testTriangle()
+
+'''
+2. fibonacci() (infinitely) yields fibonacci numbers (0, 1, 1, 2, 3, 5, 8, 13..)
+'''
+
+def fibonacci():
+    yield 0
+    a, b = 0, 1
+    while True:
+        yield b
+        a, b = b, a+b
+
+def testFibonacci():
+    f = fibonacci()
+    assert(next(f) == 0)
+    assert(next(f) == 1)
+    assert(next(f) == 1)
+    assert(next(f) == 2)
+    assert(next(f) == 3)
+    assert(next(f) == 5)
+    print('passed!')
+testFibonacci()
+
+'''
+Now we'll write a more complex generator (and find an interesting use for it!)
+
+4. rationals() infinitely yields every positive fraction (with repeats allows)
+represented as a tuple of the form (num, den) (i.e. (1, 1), (1, 2), (2, 1), (2,
+2), (2, 3))
+'''
+def rationals():
+    i = 1
+    while True:
+        for x in range(1, i+1):
+            yield (i, x)
+            yield (x, i)
+        i += 1
+
+def rationalContains(num, den, limit = 10000):
+    i = 0
+    for fraction in rationals():
+        if fraction == (num, den):
+            return True
+        i += 1
+        if i > limit:
+            return False
+
+def testRationals():
+    assert(rationalContains(1,1))
+    assert(rationalContains(1,2))
+    assert(rationalContains(2,1))
+    assert(rationalContains(1,3))
+    assert(rationalContains(2,3))
+    assert(rationalContains(3,1))
+    assert(rationalContains(3,2))
+    print('passed!')
+testRationals()
+
+'''
+5. using rationals, write a function decToFrac which takes in two float f and e
+and return a fraction in the form (num, den) that is a fraction representation
+of f, with a max error of e. For instance, if f is pi and e and e is 0.01, then
+(22, 7) could be returned since 22/7 is within 0.01 of pi.
+
+'''
+
+def decToFrac(f ,e):
+
+    for r in rationals():
+        num, den = r
+        if abs(num/den -f) <= e:
+            return (num, den)
+    
+def testDecToFrac():
+    pi = 3.141592653589793
+    assert(decToFrac(pi, 10) == (1,1))
+    assert(decToFrac(pi, 1) == (3,1))
+    assert(decToFrac(pi, 0.1) == (16,5))
+    assert(decToFrac(pi, 0.01) == (22,7))
+    print('passed!')
+testDecToFrac()
+
+'''
+Discuss: Lambda Functions
+'''
+
+def square1(x):
+    return x ** 2
+
+square2 = lambda x: x**2 
+
+#syntax: lambda (input): (whatever output I want)
+
+################################################################################
+
+#Demo 4
+
+################################################################################
+
+def sequence(f, x): #pass-in function as an argument
+    while True:
+        yield x #at first, we want to return a given value of x
+        x = f(x)
+
+def doub(x):
+    return 2 * x
+
+def conc(x):
+    return int(str(x) + str(x))
+
+doub1 = sequence(doub,1)
+conc112 = sequence(conc, 112)
+powersOf3 = sequence(lambda x: x * 3, 1)
+
+
+'''
+6. Write a function firstN which takes in a function f and a non-negative
+integer n and yields the first n integers that cause f to return True.
+Like the nth template, this is zero indexed.
+
+For example, firstN(isPrime, 7) would yield 2,3,5,7,11,13,17,19
+
+'''
+
+def firstN(f, n):
+    found = 0
+    guess = 0
+    while found <= n:
+        guess += 1
+        if f(guess):
+            yield guess
+            found += 1
+    
+
+def isPrime(n):
+    if n < 2: return False
+    for i in range(2, n):
+        if n % i == 0: return False
+    return True
+
+def testFirstN():
+    assert(list(firstN(isPrime, 11)) == [2,3,5,7,11,13,17,19,23,29,31,37])
+    print('Passed!')
+testFirstN()

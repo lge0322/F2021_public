@@ -1,0 +1,244 @@
+################################################################################
+# Midterm 2 In-Lecture Review
+# 15-112 F21
+################################################################################
+
+####################################################
+# OOP FR: SayHi Class
+####################################################
+'''
+Write the SayHi class such that it passes the test cases below.
+'''
+
+# Write the SayHi class here!
+
+class SayHi(object):
+    def __init__(self, name):
+        self.name = name
+        self.saidHiList = list()
+    
+    def sayHi(self, other):
+        other.saidHiList.append(self)
+
+    def getSaidHiList(self):
+        res = []
+        for name in self.saidHiList:
+            res.append(name)
+        return res
+    
+    def __repr__(self):
+        names = getSaidHiList(self)
+
+
+    def getSaidHiList(self):
+        res = []
+        for name in self.saidHiList:
+            res.append(name)
+        return res
+    
+    def getSaidHiNames(self):
+        return 
+
+def testSayHiClass():
+    print('Testing sayHiClass...')
+     
+    harry = SayHi('Harry')
+    ron = SayHi('Ron')
+    hermione = SayHi('Hermione')
+ 
+    hermione.sayHi(ron)
+    assert(harry.saidHiList == [ ])
+    assert(harry.getSaidHiList() == [ ])
+    assert(ron.saidHiList == [ hermione ])
+    assert(ron.getSaidHiList() == [ hermione ])
+    assert(hermione.getSaidHiList() == [ ])
+ 
+    hermione.sayHi(ron) # include duplicates
+    harry.sayHi(ron) # and list in the order they say hi, so...
+    ron.sayHi(harry)
+    assert(harry.getSaidHiList() == [ ron ])
+    assert(ron.getSaidHiList() == [ hermione, hermione, harry ])
+    assert(hermione.getSaidHiList() == [ ])
+ 
+    # A similar method returns the names, not the objects
+    assert(harry.getSaidHiNames() == [ 'Ron' ])
+    assert(ron.getSaidHiNames() == [ 'Hermione', 'Hermione', 'Harry' ])
+    assert(hermione.getSaidHiNames() == [ ])
+  
+    # Finally, we want to represent instances of the class as strings
+    print(str([ron, hermione]))
+    assert(str(ron) == 'Ron has said Hi! to Harry and Hermione') # remove duplicates, alphabetical names
+    assert(str([ron, hermione]) == '[Ron has said Hi! to Harry and Hermione, Hermione has said Hi! to no one]')
+  
+    print('Passed!')
+
+#testSayHiClass()
+
+####################################################
+# Recursion CT
+####################################################
+
+def h(x, y, depth=0):
+    # This uses depth-based indentation
+ 	# as in the course notes
+    print("-"*depth, f"h({x},{y})")
+    if (x+y <= 5):
+        result = x+y
+    else:
+        result = h(x-2,y-2,depth+1)
+        result += 2*h(x//2,y//2,depth+1)
+    print("-"*depth, "-->", result)
+    return result
+
+# print(h(4,6))
+
+####################################################
+# Recursion FR: reduceToStrings(L) (from F18 quiz9)
+####################################################
+'''
+Write the function reduceToStrings(L) which takes a list of values, L, and 
+returns a list containing all of the strings that occurred in L in their 
+original order of appearance. L can contain non-string items (like ints or other 
+lists).
+
+For example, reduceToStrings([1, "ab", True, "car"]) would return ["ab", "car"]. 
+
+Strings inside nested lists should also be ignored; therefore, 
+reduceToString(["hello", ["what"], "world"]) should return ["hello", "world"].
+'''
+
+def reduceToStrings(L):
+    if L==[]: return L
+    else:
+        first = L[0]
+        remaining = L[1:]
+        partial = reduceToStrings(remaining)
+        if type(first) == str:
+            return [first] + partial
+        else:
+            return partial
+
+
+
+
+def testReduceToStrings():
+    print("Testing reduceToStrings...", end="")
+    assert(reduceToStrings([1, "ab", True, "car"]) == ["ab", "car"])
+    assert(reduceToStrings(["hello", ["what"], "world"]) == ["hello", "world"])
+    assert(reduceToStrings([112, "carpe", ["oh", "no", ["oops"]], "diem"]) == ["carpe", "diem"])
+    print("Passed!")
+
+testReduceToStrings()
+
+####################################################
+# Backtracking FR: pairsSum(a, tgt) (from F17 quiz10)
+####################################################
+'''
+Write a recursive, backtracking function pairsSum(a, tgt) that, given an list of 
+positive integers a, splits the list into pairs of integers such that each pair 
+sums to tgt. The function should return a list of tuples containing the pairs, 
+or None if there is no solution. 
+
+a = [2, 3, 1, 4, 5, 3] 
+L = pairsSum(a, 6) 
+print(L) #Outputs: [(2, 4), (1, 5), (3, 3)] 
+
+a = [2, 3, 1, 4, 5, 4] 
+L = pairsSum(a, 6) 
+print(L) #Outputs: None 
+
+A few notes: 
+â€¢ You may assume that a will always contain an even number of elements. 
+â€¢ If there is more than one way to split the list into pairs, you only need to 
+  return one of the correct possibilities. 
+â€¢ In order to receive points, you must use recursion and backtracking to solve 
+  this problem. 
+â€¢ You may write any helper or wrapper functions that you need.
+'''
+
+def pairsSum(a, tgt):
+    return solver(a, tgt, [])
+
+def solver(num, sum, result):
+    if num ==[]: return result
+    else:
+        for i in range(len(num)):
+            for j in range(i+1, len(num)):
+                num1 = num[i]
+                num2 = num[j]
+                if num1 + num2 == sum:
+                    result.append((num1, num2))
+                    num.remove(num1)
+                    num.remove(num2)
+                    result = solver(num, sum ,result)
+                    if result != None:
+                        return result
+                    else:
+                        result.remove((num1, num2))
+                        num.insert(i, num1)
+                        num.insert(j, num2)
+    return None
+
+
+def testPairsSum():
+    print("Testing pairsSum...")
+    print("pairsSum([2,3,1,4,5,3], 6):\nExpected output: [(2, 4), (3, 3), (1, 5)]")
+    print("Observed output:", pairsSum([2,3,1,4,5,3], 6))
+
+    print("\npairsSum([2,3,1,4,5,4], 6):\nExpected output: None")
+    print("Observed output:", pairsSum([2,3,1,4,5,4], 6))
+
+    print("\npairsSum([8, 5, 3, 2, 5, 7], 10)\nExpected output: [(8, 2), (5, 5), (7, 3)]")
+    print("Observed output:", pairsSum([8,5,3,2,5,7], 10))
+
+#testPairsSum()
+
+####################################################
+# Sets & Dictionaries FR
+####################################################
+'''
+Mr. Krabs wants to know how much time each person spent in his office in case he 
+can discover any suspicious behavior. Write the function getTimeSpent(logs) 
+which takes in a log file and returns a dictionary that maps names to the total 
+amount of time they spent in the room. You may assume that everyone who has 
+entered the room has also exited the room. For example, a log of
+logs = [(0, "Krabs"), (1, "Spongebob"), (2, "Krabs"), (3, "Krabs"), 
+        (4, "Spongebob"), (5, "Krabs")]
+would return the dictionary {"Krabs": 4, "Spongebob": 3}.
+
+Krabsâ€™ time was calculated as 2-0 (because he entered at time 0 and exited at 
+time 2) + 5-3 (because he entered at time 3 and exited at time 5). Spongebobâ€™s 
+time was calculated as 4-1 since he entered at time 1 and exited at time 4.
+'''
+
+def getTimeSpent(logs):
+    times = dict()
+    for (time, name) in logs:
+        if name in times:
+            times[name].append(time)
+        else:
+            times[name] = time
+    res = dict()
+    for person in times:
+        log = times[person]
+        personTime = 0
+        for i in range(len(log)):
+            if i%2 == 0:
+                personTime -= log[i]
+            else:
+                personTime += log[i]
+        res[person] = personTime
+    return res
+
+
+def testGetTimeSpent():
+    print("Testing getTimeSpent...", end="")
+    logs1 = [(0, "Krabs"), (1, "Spongebob"), (2, "Krabs"), (3, "Krabs"), 
+             (4, "Spongebob"), (5, "Krabs")]
+    assert(getTimeSpent(logs1) == {"Krabs":4, "Spongebob":3})
+    logs2 = [(2, "Squidward"), (5, "Squidward"), (5, "Plankton"), 
+             (10, "Plankton"), (11, "Krabs"), (12, "Krabs")]
+    assert(getTimeSpent(logs2) == {"Squidward":3, "Plankton":5, "Krabs":1})
+    print("Passed!")
+
+testGetTimeSpent()

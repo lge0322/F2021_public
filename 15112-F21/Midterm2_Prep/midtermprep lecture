@@ -1,0 +1,398 @@
+'''
+backtracking problem
+
+L= pairSum(a, s)
+
+A few notes:
+you may assume that 'a' will always contain an even number of elements
+
+If there is more than one way to spli the list into pairs, you only need to 
+return one of the correct possibliites. 
+
+'''
+
+def pairsSum(a, s):
+    return solve(a, [], s)
+
+def solve(remainingNums, resultSoFar, s):
+    #base case
+
+    if len(remainingNums) == 0: return resultSoFar
+    #recursive case
+    for i in range(len(remainingNums)):
+        for j in range(i+1, len(remainingNums)):
+            num1 = remainingNums[i]
+            num2 = remainingNums[j]
+            if num1 + num2 == s:
+                resultSoFar.append((num1, num2))
+                remainingNums = remainingNums[:i] + remainingNums[i+1:j] + remainingNums[j+1:]
+                result = solve(remainingNums, resultSoFar, s)
+                if result != None:
+                    return result
+                resultSoFar.remove((num1, num2))
+                remainingNums.insert(num1, i)
+                remainingNums.insert(num2, j)
+    return None
+
+
+def testPairsSum():
+    print("Testing pairsSum...")
+    a = [2,3,1,4,5,3]
+    L = pairsSum(a, 6)
+    assert(sorted(L) == [(1,5), (2,4), (3,3)])
+    print("passed@")
+
+testPairsSum()
+
+'''
+Keep in mind when writing a recursion function
+
+1. Make the problem smaller
+2. Base case is for the smallest possible version of the input
+3. Assume recursive call works and then figure out what to do with the result
+4. Assume your function works as intended
+5. Infinite recursion means you're never reaching your base case
+6. Make sure your recursive and base case return something of the same type
+7. Use the recursive debugging strategy from the notes
+
+'''
+
+'''
+Fractals
+
+Waht does the base case of drawSierpinsky Triangle do?
+
+- drawOneTriangle
+
+
+Folders:
+
+BC: no folders - you are file
+
+RC: If you are at a folder
+'''
+
+
+'''
+Free Response:
+
+write the function reduceToSTring(lst) which takes a list of values, list, and 
+returns a list containg all of the strings that occurred in list in their original order
+of appearnace. list can contain non-string iterms( like ints of other lists)
+
+For example, reducetoStrings([1, "ab", True, "car"]) would return ["ab", "car"]
+Strings inside nested lists should also be ignored.
+'''
+
+def reduceToStrings(lst):
+    #base case
+    if lst == []: return []
+    else:
+        first = lst[0]
+        rest = lst[1:]
+        partialResult = reduceToStrings(rest)
+        if (isinstance(first, str)):
+            return [first] + partialResult
+        else:
+            return partialResult
+    
+def testReduceToStrings():
+    assert(reduceToStrings([1, "ab", True, "car"]) == ["ab", "car"])
+    print('passed!')
+
+testReduceToStrings()
+
+
+
+class Sayhi(object):
+    def __init__(self, name):
+        self.name = name
+        self.saidHiList = []
+
+    def __repr__(self):
+        names = self.getSaidHiNames()
+        if names == []:
+            return f"{self.name} has said Hi! to no one"
+        names = set(names)
+        names = sorted(names)
+        namesString = "and".join(names)
+        return f"{self.name} has said Hi! to {namesString}"
+
+    def sayHi(self, other):
+        other.saidHiList.append(self)
+
+    def sayHiList(self):
+        return self.saidHiList
+
+    def getSaidHiNames(self):
+        names = []
+        for person in self.saidHiList:
+            names.append(person)
+        return names
+
+
+def testSayHiClass():
+    print("Testing SayHiClass...")
+
+    harry = Sayhi("Harry")
+    ron = Sayhi("Ron")
+    Herminone= Sayhi("Herminone")
+
+    Herminone.sayHi(ron)
+    assert(harry.sayHiList == [])
+    assert(harry.getSaidHiList() == [])
+    assert(ron.saidHiList == [Herminone])
+    assert(ron.getSaidHiList() == [Herminone])
+    assert(Herminone.getSaidHiList() == [])
+
+    Herminone.sayHi(ron)
+    harry.sayHi(ron)
+    ron.sayHi(harry)
+
+    assert(harry.getSaidHiList() == [ron])
+    assert(ron.getSaidHiList() == [Herminone, Herminone, harry])
+    assert(Herminone.getSaidHiNames() == [])
+
+    print(str([ron, Herminone]))
+    assert(str(ron) == "Ron has said Hi! to Harry and Herminone")
+    assert(str([ron, Herminone])== '[Ron has said Hi! to Harry and Herminone')
+    print('passed!')
+
+
+#testSayHiClass()
+
+
+class Dog(object):
+    def __init__(self, name, breed, age):
+        self.name = name
+        self.breed= breed
+        self.age = age
+    
+    def bark(self):
+        print("Bark!")
+
+kosbie = Dog("Kosbie", "German Shepherd", 8)
+
+def h(x, y, depth = 0):
+    print("-"*depth, f"h({x}, {y})")
+    if (x+y <= 5):
+        result = x+y
+    else:
+        result = h(x-2, y-2, depth+1)
+        result += 2*h(x//2, y//2, depth+1)
+    print("-"*depth, "-->", result)
+    return result
+print(h(4,6))
+'''
+h(4,6)
+-h(2, 4)
+--h(0, 2)
+-- --> 2
+--h(1, 2)
+-- --> 3
+- --> 8
+-- h(2, 3)
+- --> 5
+ --> 18
+18
+
+
+
+result = h(2,4,1) + 2*h(2, 3, 1)
+
+5
+'''
+
+
+'''
+Free Response:
+
+Mr. Krabs wants to know how much time each person spent in his offie in case
+he can discover any suspicious behavior. Write the function getTimeSpent(logs)
+which takes in a log file and returns a dictionary that maps names to the totla mount of time
+they spent in the room. you may assume that everyone who has entered the room has also exited the room
+
+For example, a log of
+logs = [(0, "krabs"), (1, "Spongebob"), (2, "krabs"), (3, "krabs"), (4, "Spongebob"),
+        (5, "krabs")]
+    would return the dictionary:
+
+    ("krabs": 4, "Spongebob": 3)
+'''
+
+def getTimeSpent(logs):
+    times = dict()
+    for (time, person) in logs:
+        if person in times:
+            times[person].append(time)
+        else:
+            times[person] = [time]
+    res = dict()
+    for person in times:
+        log = times[person]
+        personsTime = 0
+        for i in range(len(log)):
+            if i % 2 ==0:
+                personsTime -= log[i]
+            else:
+                personsTime += log[i]
+        res[person] = personsTime
+    return res
+
+def testGetTimeSpent():
+    logs = [(0, "krabs"), (1, "Spongebob"), (2, "krabs"), (3, "krabs"), 
+                (4, "Spongebob"), (5, "krabs")]
+    assert(getTimeSpent(logs) == {"krabs": 4, "Spongebob": 3})
+    print('passed!')
+
+testGetTimeSpent()
+
+def vmc(L):
+    result = set()
+    count = dict()
+
+    for number in L:
+        if number in count:
+            count[number] += 1
+        else:
+            count[number] =1
+    
+    for number in count:
+        if count[number] == number:
+            result.add(number)
+    return result
+
+def testVMC():
+    print("Testing vmc...")
+    assert(vmc([]) == set())
+    assert(vmc([1,2,3,4,5])== {1})
+    assert(vmc([1,5,1,1,2] )== set())
+    assert(vmc([5,2,5,2,5,6,5,1,5,0]) == {1,2,5})
+    print('passed!')
+testVMC()
+
+
+class File(object):
+    def __init__(self, name, size):
+        self.name = name
+        self.size = size
+
+    def getSize(self):
+        return self.size
+    
+    def __repr__(self):
+        return f"File('{self.name}', {self.size})"
+
+class Folder(object):
+    def __init__(self, L):
+        self.listFile = L
+
+    def getFileNames(self):
+        fileNames = set()
+        for elem in self.listFile:
+            if isinstance(elem, File):
+                fileNames.add(elem.name)
+            else:
+                for fileName in elem.getFileNames():
+                    fileNames.add(fileName)
+        return fileNames
+
+
+def testFileFolder():
+    print("Testing File, Python File and Folder...", end="")
+    a = File("A", 15)
+    b = File("B", 1)
+    c = File("C", 12)
+    assert(a.getSize() == 15)
+    print(a)
+    #assert(a == File("A", 15))
+    assert(a != File("A", 16))
+    assert(a != File("B", 15))
+    assert(a != "Don't Crash Here")
+    print(str([b, c]))
+    assert(str([b, c]) == "[File('B', 1), File('C', 12)]")
+    # Hint: do not write more methods than you need to...
+
+    # These work just like actual files and folders...
+    F0 = Folder([])
+    F1 = Folder([a, F0])
+    F2 = Folder([F1])
+    F3 = Folder([b, h])
+    F4 = Folder([F2, c, F3])
+    # Hint: this method is recursive...
+    assert(F0.getFileNames() == set())
+    assert(F1.getFileNames() == {"A"})
+    assert(F2.getFileNames() == {"A"})
+    assert(F3.getFileNames() == {"B", "Hi"})
+    assert(F4.getFileNames() == {"A", "B", "C", "Hi"})
+    print("Passed!")
+#testFileFolder()
+
+
+def isPrime(n):
+    if n < 2: return False
+    return isPrimeHelper(n, 2)
+
+def isPrimeHelper(n, i):
+    if i >= n:
+        return True
+    elif n % i == 0:
+        return False
+    else:
+        return isPrimeHelper(n, i+1)
+
+def onlyPrimes(L):
+    if L == []: return L
+
+    elif isPrime(L[0]):
+        return [L[0]] + onlyPrimes(L[1:])
+    else:
+        return onlyPrimes(L[1:])
+
+def testOnlyPrimes():
+    print("Testing onlyPrimes...")
+    assert(onlyPrimes([])==[])
+    assert(onlyPrimes([1,5,1,1,2]) == [5,2])
+    assert(onlyPrimes([1,2,3,4,5,6,7,8,9]) == [2,3,5,7])
+    print("passed!")
+testOnlyPrimes()
+
+def kSuperSplit(L, k, n):
+    buckets = list()
+
+    for i in range(k):
+        buckets.append(list())
+    print(buckets)
+    return kSuperSplitHelper(L, k, n, buckets)
+
+def kSuperSplitHelper(L, k, n, buckets):
+    if L ==[]: return buckets
+
+    elem = L[0]
+    for i in range(k):
+        currentBucket = buckets[i]
+        if sum(currentBucket) + elem <= n:
+            currentBucket.append(elem)
+            result = kSuperSplitHelper(L[1:], k, n, buckets)
+            if result != None:
+                return result
+            else:
+                currentBucket.pop()
+    return None
+
+
+
+def testKSuperSplit():
+    print("testing kSuperSplit...")
+    res = kSuperSplit([1,5,1,1,2,3,4,5], 3,8)
+    print(res)
+    assert(res != None)
+    assert(len(res) == 3)
+    assert(sorted(res[0] + res[1] + res[2]) == [1,1,1,2,3,4,5,5])
+    assert(sum(res[0]) <= 8)
+    assert(sum(res[1]) <= 8)
+    assert(sum(res[2]) <= 8)
+    print('passed!')
+testKSuperSplit()
+
+

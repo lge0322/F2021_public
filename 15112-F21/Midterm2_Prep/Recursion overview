@@ -1,0 +1,158 @@
+'''
+Basic Recursion
+
+    - Recursive problems are divided into two possible cases:
+        a base case and a recursive case
+        - base case: return solution for smallest version of input
+        ( common base cases include [], 0, 1, "", etc)
+        - recursive case: recursively calls the function on a smaller input (
+            some examples include L[1:], n -1, s[:-1], n//2, etc) the results should 
+            eventually hit the base case and cease recursing
+        )
+'''
+
+'''
+When should you use a wrapper function?
+    - if we want extra params
+
+What causes infinite recursion?
+    - when base case isn't reached
+
+Do not use mutalbe default values in function parameters(lists, sets, dictionaries)
+
+'''
+
+'''
+Backtracking
+
+Try to brute-force the solution to a problem: try every possible move in a given state
+
+base case: check if your state (board, maze, etc) is complete/ reached a solution.
+If so, return that solution
+
+Recursive case: Go through all possible moves and check if the move is legal. 
+        If it is, recursively call your function with the new move, and see if that solution
+        led to a valid solution. If it did, return. Otherwise, backtracak and try the
+        next possible move. 
+'''
+
+
+#In the Fibonacci sequence, each element is the sum of the two
+#elements before it. This translates nicely into recursive code!
+
+def fib(n):
+    if n < 2: return 1
+    else:
+        return fib(n-1) + fib(n-2)
+
+print([fib(n) for n in range(15)])
+
+
+'''
+Write the function alterntingCharacters which takes in a string s 
+and returns True if the characters alternate between vowel and non-vowel.
+
+'''
+
+def alternatingCharactersHelper(s, prevIsVowel):
+    if s == "": return True
+    if (s[0] in "aeiouy") == prevIsVowel:
+        return False
+    return alternatingCharactersHelper(s[1:], not prevIsVowel)
+
+def alternatingCharacters(s):
+    if s == "": return True
+    return alternatingCharactersHelper(s[1:],s[0] in "aeiouy" )
+
+def testAlternatingCharacters():
+    print("Testing alternatingCharacters...")
+    assert(alternatingCharacters("") == True)
+    assert(alternatingCharacters("a") == True)
+    assert(alternatingCharacters("z") == True)
+    assert(alternatingCharacters("at") == True)
+    assert(alternatingCharacters("honor") == True)
+    assert(alternatingCharacters("aluminum") == True)
+    print('passed!')
+testAlternatingCharacters()
+
+'''
+write the function listFolders which takes in the path to a file or folder and 
+returns a set of all folder names that are inside of that folder, including the folder itself
+
+
+'''
+
+import os
+
+def readFile(path):
+    with open(path, "r") as f:
+        txt = f.read()
+    return txt
+
+def listFolders(path):
+    return listFoldersHelper(path, set())
+
+def listFoldersHelper(path, res):
+    if os.path.isfile(path): return res
+    else:
+        res.add(stripPath(path))
+        for item in os.listdir(path):
+            itemPath = path + "/" + item
+            return listFoldersHelper(itemPath, res)
+
+def stripPath(path, result = ""):
+    if path == "": return result
+    elif path[0] == "/":
+         return stripPath(path[1:], "")
+    else:
+        stripPath(path[1:], result + path[0])
+
+'''
+Write the function boggle which takes in a 2D list of characters L 
+and a word s and returns true if s can be spelled from L using the following rules:
+
+1. you can strat in any cell of L
+2. you must move from 1 cell to one of the 8 neighboring cells
+3.you can use the same cell twice, just not in a row
+
+For instnace, consider the grid below,
+
+t a t
+e n q
+c i u
+
+tent can be spelled by starting from the t, in teh top left,
+then moving down to the e, then right to the n, then up-left to the t
+you can also spell net, quiance, ant, tan. however, innate cannot be spelled because
+you would have to use the n in teh board 2x in a row. Also, tie cannot be 
+spelled because there is no i next to either t.
+
+
+'''
+
+#1. Check the letter at the current location of our path
+#2. If the letter matches the first letter of our target word:
+    #a. that's when we know we can continue walking along
+#3. If the letter doesn't match, fail!
+#4. we know we've finished when there are no letters left to search for 
+def boggle(L, word):
+    for startRow in range(len(L)):
+        for startCol in range(len(L[0])):
+            if boggleHelper(L, word, startRow, startCol) == True:
+                return True
+    return False
+    
+def boggleHelper(L, word, curRow, curCol):
+    if word == "": return True
+    if L[curRow][curCol] != word[0]:
+        return False
+    for drow in [-1, 0, 1]:
+        for dcol in [-1, 0, 1]:
+            if drow == 0 and dcol == 0: continue
+            newRow , newCol = curRow + drow, curCol + dcol
+        if 0 <= newRow < len(L) and 0<= newCol < len(L[0]):
+            if boggleHelper(L, word[1:], newRow, newCol) == True:
+                return True
+    return False
+
+

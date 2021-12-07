@@ -1,0 +1,316 @@
+################################################################################
+
+#Demo 1
+
+################################################################################
+
+'''
+discussion of try / except
+'''
+
+def foo(x):
+    return 1 / x
+
+def tryExceptDemo1():
+    x = 1
+    try:
+        x -= 1
+        print("A")
+        print(foo(x))
+        print("g")
+    except:
+        print(f"That was bad. Can't call foo{x}")
+
+tryExceptDemo1()
+
+################################################################################
+
+#Demo2
+
+################################################################################
+
+def tryExceptDemo2():
+    try:
+        print("A")
+        print(foo(0))
+        print("B")
+    except Exception as e:
+        print(type(e).__name__, "==>", e)
+        #in this case, we get the error message like:
+        #ZeroDivisonError ==> division by zero
+tryExceptDemo2()
+
+################################################################################
+
+#Demo 3
+
+################################################################################
+
+def tryExceptDemo3():
+    try:
+        print("A")
+        #print(foo(0))
+        print (1 == 2) 
+        #print("ABC"[3]) #E: IndexError --> string index out of range
+        #print(x+y) #C: name 'x' is not defined
+        print("B")
+    except NameError as e:
+        print("C", e)
+    except AssertionError:
+        print("D")
+    except Exception as e:
+        print("E", type(e).__name__, "--> ", e) 
+tryExceptDemo3()
+
+################################################################################
+
+#Demo4
+
+################################################################################
+
+print(eval("15 + 112"))
+
+#evaluate the expression and return the result
+
+print(eval("int(str(27) * 2)+1"))
+
+#eval() takes a real python code and evaluate it
+
+foo = 42
+print(eval("foo + foo"))
+
+
+exec("x = 13\ny =2\nprint(x**y)") #line defines x and y
+
+#exec() is a more powerful version of eval
+
+
+'''
+Mission: a better assert() function
+
+- It can only test one thing, if one thing fails you done
+- It looks like it crahses (and it's ugly)
+- Doesn't print anything if you did it correctly
+- Doesn't tell you what you returned if it was wrong
+
+smartAssert(expression, result) should evaluate the expression and compare it to
+the result. If they match, it should return True and print a good message.
+If they don't (or an exception is raised), it should return False and print a 
+bad message.
+
+From there we can add further features:
+- print the expcetion type and string
+- print the traceback, including line numbers
+-clean up the traceback text and exclude lines caused by eval() or smartAssert()
+
+'''
+import sys
+import traceback
+
+def getTraceBack():
+    tbStack = traceback.extract_tb(sys.exc_info()[2])
+    tbList = traceback.format_list(tbStack)
+    return tbList
+
+def parseErrorLine(line):
+    fileInfo, lineInfo = line.split('", line ')
+    fileName = fileInfo.split("/")[-1]
+    lineNumber, funInfo = lineInfo.split(", in ")
+    function, code = funInfo.splitlines()
+    return fileName, lineNumber, function, code
+
+def smartAssert(expression, result):
+    try:
+        answer = eval(expression)
+        assert(answer == result)
+        if answer == result:
+            print(f"[{chr(10004)}] {expression} == {repr(result)}")
+            return True
+    except AssertionError:
+            print(f"[{chr(10006)}] {expression} == {repr(result)}")
+            print(f"\tReturned {repr(answer)} instead")
+            return False
+    except Exception as e:
+        print(f"[{chr(10006)}] {expression} == {repr(result)}")
+        print(f"\t{type(e).__name__}: {e}")
+        for line in getTraceBack():
+            if "<module>" in line or "<string>" in line: continue
+            fileName, lineNumber, function, code = parseErrorLine(line)
+            print(f"\t[{lineNumber}] {fileName} {function} {code.strip()}")
+        return False
+
+def alpha(x):
+    return (x ** 2 +1) / (x -1)
+
+def beta(x):
+    return alpha(x) / alpha(x-1)
+
+print(smartAssert("15 + 112", 127))
+print(smartAssert("2 ** 3", 6))
+print(smartAssert("y ** 3", 27))
+print(smartAssert("alpha(1)", 42))
+print(smartAssert("beta('omega')", 42))
+
+'''
+Now, write a function autograder which takes in a multiline string of this
+format:
+
+isPerfectSquare(0) >>> True
+isPerfectSquare(1) >>> True
+isPerfectSquare(2) >>> False
+
+isPerfectSquare(3) >>> False
+
+And performs a smart assertion on each non-empty line, at the end printing 
+out the number of test cases that passed.
+
+
+'''
+
+def autograder(testCases):
+    passed = 0 
+    total = 0
+    for line in testCases.splitlines():
+        if line == "": continue
+        expression, result = line.split(" >>> ")
+        evaluatedResult = eval(result)
+        if smartAssert(expression, evaluatedResult):
+            passed += 1
+        total += 1
+    print(f"Passed {passed} test cases, out of {total} in total")
+    return passed
+
+def isPerfectSquare(n):
+    return round(n ** 0.5) == n ** 0.5
+
+ipsTestCases = """
+
+isPerfectSquare(0) >>> True
+isPerfectSquare(1) >>> True
+isPerfectSquare(2) >>> False
+
+isPerfectSquare(3) >>> True """
+
+autograder(ipsTestCases)
+
+def nthCircularPrime(n):
+    return 42
+
+ncpTestcases = """
+nthCircularPrime(0) >>> 2
+nthCircularPrime(1) >>> 3
+nthCircularPrime(2) >>> 5
+nthCircularPrime(3) >>> 7
+nthCircularPrime(4) >>> 11
+nthCircularPrime(5) >>> 13
+
+"""
+
+'''
+Discuss: raise keyword
+'''
+
+################################################################################
+
+#Demo5
+
+################################################################################
+
+#raise TypeError("Foo foo fulffykins") #more powerful version of return
+
+#give a name for TypeError, where "Foo foo fulffykins" is our error message
+
+#raise AssertionError("Hey, your answer is wrong!")
+
+#raise IndexError
+
+# z = ZeroDivisionError("Don't divide by zero!!!")
+#raise z
+
+################################################################################
+
+#Demo6
+
+################################################################################
+
+#Syntax for defining a new type of exception
+
+class PalindromeException(Exception):
+    pass
+
+def containSubpalindrome(s):
+    try:
+        for i in range(len(s)):
+            for j in range(i+3, len(s)+1):
+                print(i, j, s[i:j])
+                if s[i:j] == s[i:j][::-1]:
+                    result = s[i:j]
+                    raise PalindromeException
+        print("Never broke out of loop")
+        return False
+    except PalindromeException:
+        print("Broke out of loop")
+        return result
+
+print(containSubpalindrome("alphabet"))
+print(containSubpalindrome("risotto dish"))
+            
+'''
+Write a function findPrimeSubstrings which continously takes in text
+via input() and prints out results based on the following rules:
+
+- if the string says "quit" then finish the loop and print a goodbye message
+- if the string does not contain strictly digits, skip to the next iteration 
+(and print ouf an error message)
+- if the string contains a substring that is a prime, print it out and then
+move on to the next iteration. Otherwise print out a e message indicating that 
+it has no prime substrings
+
+As a catch, we will not use break, continue, or return. However, several custom
+exceptions have been defined.
+
+'''
+
+class Endfunction(Exception):
+    pass
+
+class EndNestedLoop(Exception):
+    pass
+
+class EndIteration(Exception):
+    pass
+
+def findPrimeSubstrings():
+    try:
+        while True:
+            try:
+                number = input("Input an number: ")
+                if number == "quit":
+                    raise Endfunction
+                elif not number.isdigit():
+                    raise EndIteration
+                else:
+                    try:
+                        for i in range(len(number)):
+                            for j in range(i+1, len(number)+1):
+                                sub = number[i:j]
+                                if isPrime(int(sub)):
+                                    raise EndNestedLoop
+                        print(f"Contains no prime subpalindromes\n")
+                    except EndNestedLoop:
+                        print(f"Prime subpalindrome: {sub}\n") 
+            except EndIteration:
+                print("You must input a number")
+    except Endfunction:
+        print("Have a nice day!")
+
+findPrimeSubstrings()
+
+def isPrime(n):
+    if n < 2: return False
+    if n == 2: return True
+    maxFactor = round(n ** 0.5)
+    for factor in range(2, maxFactor+1):
+        if n % factor == 0:
+            return False
+    return True

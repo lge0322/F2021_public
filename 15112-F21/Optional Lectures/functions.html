@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<title>JS Demo</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-black.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
+.w3-sidebar {
+  z-index: 3;
+  width: 250px;
+  top: 43px;
+  bottom: 0;
+  height: inherit;
+}
+code {
+    display: block;
+    background-color: #f5f5f5;
+    border-radius: 3px;
+    font-family: courier, monospace;
+    padding: 0 3px;
+
+}
+.wordSearchRow {
+    display: flex; 
+    font-size: 9.5px; 
+    text-align: center; 
+    font-size: 15px;
+    color: black;
+}
+.wordSearchCell {
+    width: 50px; 
+    height: 50px; 
+    margin: 1px; 
+    border: 1px solid black; 
+    border-radius: 5px;
+    font-family: New Century Schoolbook, TeX Gyre Schola, serif;
+    font-weight: bold;
+    padding: 15px;
+}
+</style>
+<script>
+    // Get the Sidebar
+    var mySidebar = document.getElementById("mySidebar");
+    
+    // Get the DIV with overlay effect
+    var overlayBg = document.getElementById("myOverlay");
+    
+    // Toggle between showing and hiding the sidebar, and add overlay effect
+    function w3_open() {
+      if (mySidebar.style.display === 'block') {
+        mySidebar.style.display = 'none';
+        overlayBg.style.display = "none";
+      } else {
+        mySidebar.style.display = 'block';
+        overlayBg.style.display = "block";
+      }
+    }
+    
+    // Close the sidebar with the close button
+    function w3_close() {
+      mySidebar.style.display = "none";
+      overlayBg.style.display = "none";
+    }
+    </script>
+<body>
+
+<!-- Navbar -->
+<div class="w3-top">
+  <div class="w3-bar w3-theme w3-top w3-left-align w3-large">
+    <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hover-white w3-large w3-theme-l1" href="javascript:void(0)" onclick="w3_open()"><i class="fa fa-bars"></i></a>
+    <a href="index.html" class="w3-bar-item w3-button w3-theme-l1">Javascript Demo Website</a>
+    <a href="hello.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Hello</a>
+    <a href="events.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Events</a>
+    <a href="words.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Words</a>
+    <a href="objects.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Objects</a>
+    <a href="functions.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Functions</a>
+    <a href="patterns.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Patterns</a>
+    <a href="summary.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">JS Summary</a>
+  </div>
+</div>
+
+<!-- Sidebar -->
+<nav class="w3-sidebar w3-bar-block w3-collapse w3-large w3-theme-l5 w3-animate-left" id="mySidebar">
+  <a href="javascript:void(0)" onclick="w3_close()" class="w3-right w3-xlarge w3-padding-large w3-hover-black w3-hide-large" title="Close Menu">
+    <i class="fa fa-remove"></i>
+  </a>
+  <h4 class="w3-bar-item"><b>Some Fun Links</b></h4>
+  <a class="w3-bar-item w3-button w3-hover-black" href="https://www.cs.cmu.edu/~112/">112 Website</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="https://www.w3schools.com/js/default.asp">W3Schools JS Guide</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="https://www.w3schools.com/w3css/w3css_templates.asp">W3 CSS Templates</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="https://www.youtube.com/watch?v=Xw1C5T-fH2Y">More Cute Dogs</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="https://en.wikipedia.org/wiki/Axolotl">Axolotl Wiki Page</a>
+</nav>
+<div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+<div class="w3-main" style="margin-left:250px">
+
+  <!-- The "main" part of the page -->
+
+  <div class="w3-row w3-padding-64">
+    <div class="w3-twothird w3-container">
+
+      <!-- The big heading text -->
+      <h1 class="w3-text-teal">Functional Weirdness</h1>
+
+      <script src="functions.js"></script>
+
+      <p>
+          A brief introduction to a couple of functional programming tricks that 
+          JS has strong support for. These exist in many languages (including 
+          Python), and are often very convenient ways to do some complex 
+          calculations.
+      </p>
+      
+      <h4>Arrow Functions</h4>
+
+        <button onclick="applyArrows()">Apply Arrows</button>
+
+        <p>
+            An arrow function (more commonly known in other languages as
+            an anonymous function, a lambda function, or a lambda) is an
+            fucntion created with a single expression in the formats below:
+        </p>
+
+        <pre>
+            <code>
+// Takes in 2 variables a and b and adds them
+var f1 = (a, b) => a + b;
+
+// Takes in 2 variables a and b and returns the max
+var f2 = (a, b) => {
+    if (a >= b) {return a;}
+    return b;
+};
+
+// Takes in a variable a and concatenates it to itself
+var f3 = (a) => Number(a.toString() + a.toString());
+
+// Takes in a variable a and returns True if it is even
+var f4 = (a) => a % 2 == 0;
+            </code>
+        </pre>
+
+        <p>
+            If you click the button above and provide 2 numbers as inputs,
+            then JS will call these 4 arrow functions for you and display
+            the results below.
+        </p>
+
+        <p id="arrows">
+
+        </p>
+
+        <p>
+            The perk of using arrow functions is that you don't need to
+            even define a function, or bind them to a variable name. You
+            can just create them and immediatly use them for some purpose,
+            as shown below, which creates a quadratic formula function
+            and immediatly calls it on inputs 1, -2, -8, without ever
+            naming the function.
+        </p>
+
+        <pre>
+            <code>
+var x = ((a, b, c) => (-b + Math.sqrt(b*b - 4*a*c)) / (2 * a))(1, -2, -8)
+            </code>
+        </pre>
+    
+        <h4>Higher Order Functions</h4>
+        <p>
+            Higher Order Functions (HOFs for short) are functions that take in
+            functions as inputs, return functions as outputs, or both. There
+            are many such funcitons, but we'll mention a few extremely common
+            ones that are built into JS. The first is map, which applies
+            a function to an entire list (i.e. squares the elements). The
+            second is filter, which removes all the elements that do not
+            meet a certain criteria (i.e. filters out all perfect squares).
+            The third is reduce, which uses a function to combine all of
+            the elements of a list (i.e. get the sum of a list). These are often
+            used with arrow functions.
+        </p>
+        <p>
+            If you click the button below, a new list of random 2 digit integers
+            L will be created (using a HOF that is very similar to list
+            comprehension). It is then sorted by the 10s digit of each
+            number (yes, this version of sorting is also a HOF). Then, a new
+            list M is created by filtering L to only keep the odd elements.
+            Then, a new list N is created by mapping the function which takes
+            each element modulo 10 to M. Finally, a value O is obtained by
+            reducing M with a funciton that takes in 2 integers, converts
+            them to strings, and adds them together.
+        </p>
+
+        <button onclick="applyHOFs()">Apply HOFs</button>
+
+        <p id="hofs">
+
+        </p>
+
+
+    </div>
+
+    <!-- The GIF on the side -->
+    <div class="w3-third w3-container">
+      <p class="w3-border w3-padding-large w3-padding-32 64-center"><img src="https://i.imgur.com/O5cPH4X.gif" width=100%></p>
+    </div>
+  </div>
+
+  <!-- Footer of the web page -->
+  <footer>
+    <div class="w3-container w3-theme-l1">
+      <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a></p>
+    </div>
+  </footer>
+
+</div>
+
+</body>
+</html>
+

@@ -1,0 +1,33 @@
+'''
+What is AI?
+
+- Optimization
+- Game Theory
+- Machine learning (subclass of AI)
+    - Classification
+    - Regression
+    - Unsupervised learning
+    - Computer vision
+    - Deep learning
+
+    1. Training data 
+    2. Train the Machine learning algorithm <--- Evaluate
+    3. Model
+Input Data --> 4. Machine learning algorithm --> Prediction -->-^^
+
+- Natural Language Processing
+- Reinforcement Learning 
+- Robotics
+'''
+
+#First ML Algorithm: K-Nearest Neighbors
+
+#Intuition: Similar inputs give similar outputs
+#Data represented by a vector of features (numbers)
+#Get the k-closest data points to an input, and vote for the result!
+
+def predict(X, D):
+    k = 5
+    closest = getKClosest(X, D, k)
+    mostLikelyClass = getMajorityClass(closest)
+    return mostLikelyClass

@@ -1,0 +1,161 @@
+def packItems(items, bagSizes):
+    bucket = list()
+    for i in range(len(bagSizes)):
+        bucket.append([])
+    return packItemsHelper(items, bagSizes, bucket)
+
+def packItemsHelper(items, bagSizes, bucket):
+    if items == []: 
+        print(bucket)
+        return bucket
+    elem = items[0]
+    for i in range(len(bagSizes)):
+            curBucket = bucket[i]
+            if sum(curBucket) < int(bagSizes[i]):
+                print(bagSizes[i])
+                curBucket.append(elem)
+            result = packItemsHelper(items[1:], bagSizes, bucket)
+            if result != None:
+                return result
+            else:
+                curBucket.pop()
+    return None
+
+def test():
+    assert(packItems([4, 8, 1, 4, 3], [12, 9]) == [ [4, 8], [1, 4, 3] ])
+    print('passed!')
+test()            
+    
+
+
+def ct1(s, lst):
+ if s in lst:
+  print(s, "repeat!")
+  return
+ else:
+  lst.append(s)
+ if len(s) == 1:
+  print(s)
+ else:
+  if len(s) == 3:
+    print("\n3:", s)
+  ct1(s[1:], lst)
+  ct1(s[:-1], lst)
+
+ct1("woah", [])
+
+
+import copy
+def ct2(lst):
+ d={}
+ for i in range(len(lst)//2):
+  d[lst[i]]=lst[i*2]
+ print(d)
+ d[None]={0}
+ for i in lst:
+  if i not in d:
+   d[None].add(i)
+ print(d[None])
+ b=copy.deepcopy(d)
+ for i in b:
+  if type(d[i]) not in {set, list, tuple}:
+   if d[i] in d:
+    del d[i]
+ del d[None]
+ print(d)
+ return len(d)
+lst=['x','x','y','z',4,5,6,6]
+print(ct2(lst))
+
+def getItemCounts(lst):
+    res = dict()
+    for value in lst:
+        res[value] = res.get(value, 0) + 1
+    return res
+
+
+def testGetItemCounts():
+    assert(getItemCounts(["a", "b", "c", "a", "a", "c"]) == 
+        {"a" : 3, "b" : 1, "c" : 2})
+    print('passed!')
+testGetItemCounts()
+
+class Bird(object):
+    def __init__(self, name, size):
+        self.name = name
+        self.size = size
+        self.originalSize = size
+    
+    def fly(self):
+        if self.size >= self.originalSize*2:
+            return "can't fly"
+        return "can fly"
+
+    def feed(self, number):
+        self.size  = self.size + number
+    
+    def __repr__(self):
+        if self.originalSize *2 > self.size:
+            return f"{self.name} weighs {self.size}oz and can fly"
+        else:
+            return f"{self.name} weighs {self.size}oz and can't fly"
+
+    def __eq__(self, other):
+        return (isinstance(other, Bird) and self.name == other.name and 
+                    self.size == other.size)
+
+class Chicken(Bird):
+    def __init__(self, name, size):
+        super().__init__(name, size)
+    
+    def fly(self):
+        return "can't fly"
+
+    def __repr__(self):
+    
+        return f"{self.name} weighs {self.size}oz and can't fly"
+
+
+
+def test():
+###Make a bird named Steve
+    b = Bird("Steve",5)
+    assert(b.name=="Steve")
+    assert(b.size==5)
+    print(b.fly())
+    assert(b.fly()=="can fly")
+    #Feed Steve
+    b.feed(2)
+    assert(b.size==7)
+    assert(repr(b)=="Steve weighs 7oz and can fly")
+    #Birds can't fly if their size is twice as big as their original size!
+    b.feed(4)
+    assert(b.size==11)
+    assert(b.fly()=="can't fly")
+    #Birds are equal if they have the same name and size
+    b2=Bird("Steve",11)
+    assert(b==b2)
+    ###Make a chicken named Betty
+    c = Chicken("Betty", 20)
+    assert(isinstance(c,Bird))
+    assert(c.name=="Betty")
+    assert(c.size==20)
+    #Chickens can't fly
+    assert(c.fly()=="can't fly")
+    assert(repr(c)=="Betty weighs 20oz and can't fly")
+    #You can still feed chickens though
+    c.feed(5)
+    assert(c.size==25)
+    ###Chickens can also lay chicken eggs
+    e=c.layChickenEgg()
+    assert(type(e)==ChickenEgg)
+    assert(isinstance(e,Bird)==False)
+    ###Other birds can't lay chicken eggs though
+    try:
+        b.layChickenEgg()
+        eggLaid=True
+    except:
+        eggLaid=False
+    assert(not eggLaid)
+    print('passed!')
+test()

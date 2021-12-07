@@ -1,0 +1,20 @@
+#powerset
+
+def powerset(a):
+    if len(a) == 0: return [[]]
+    else:
+        allSubsets = []
+        for subset in powerset(a[1:]):
+            allSubsets += [subset]
+            allSubsets += [[a[0]]+ subset]
+        return allSubsets
+
+def permutations(a):
+    if (len(a))== 0:
+        return [[]]
+    else:
+        allPerms = []
+        for subPermutation in permutations(a[1:]):
+            for i in range(len(subPermutation)+1):
+                allPerms += [subPermutation[:i] + [a[0]] + subPermutation[i:]]
+        return allPerms

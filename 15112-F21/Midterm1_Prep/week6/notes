@@ -1,0 +1,100 @@
+from types import SimpleNamespace
+
+dog1 = SimpleNamespace(name = 'Dino', age = 10, breed= 'shepherd')
+print(dog1)
+print(dog1.name)
+
+dog1.name = 'fred'
+print(dog1)
+print(dog1.name)
+
+from dataclasses import make_dataclass
+
+Dog = make_dataclass('Dog', ['name', 'age', 'breed'])
+
+dog1 = Dog(name = 'Dino', age = 10, breed='shepherd')
+print(dog1)
+print(dog1.name)
+print(type(dog1))
+
+
+# Objects are mutable so aliases change!
+# Run this with the visualizer to make it clear!
+from types import SimpleNamespace
+import copy
+
+dog1 = SimpleNamespace(name='Dino', age=10, breed='shepherd')
+dog2 = dog1            # this is an alias
+dog3 = copy.copy(dog1) # this is a copy, not an alias
+
+dog1.name = 'Spot'
+print(dog2.name) # Spot (the alias changed, since it is the same object)
+print(dog3.name) # Dino (the copy did not change, since it is a different objec)
+
+from cmu_112_graphics import *
+import random
+
+def appStarted(app):
+    app.rows = 10
+    app.cols = 10
+    app.margin = 5
+    app.timerDelay = 250
+    initSnakeAndFood(app)
+    app.waitingForFirstKeyPress = True
+
+def initSnakeAndFood(app):
+    app.snake = [(0,0)]
+    app.direction = (0, +1) 
+    placeFood(app)
+    app.gameOver = False
+
+def getCellBounds(app, row, col):
+    # aka 'modelToView'
+    # returns (x0, y0, x1, y1) corners/bounding box of given cell in grid
+    gridWidth  = app.width - 2*app.margin
+    gridHeight = app.height - 2*app.margin
+    x0 = app.margin + gridWidth * col / app.cols
+    x1 = app.margin + gridWidth * (col+1) / app.cols
+    y0 = app.margin + gridHeight * row / app.rows
+    y1 = app.margin + gridHeight * (row+1) / app.rows
+    return (x0, y0, x1, y1)
+
+def keyPressed(app, event):
+    if (app.waitingForFirstKeyPress):
+        app.waitingForFirstKeyPress = False
+    elif (event.key == 'r'):
+        initSnakeAndFood(app)
+    elif (event.key == 'Up'):      app.direction = (-1, 0)
+    elif (event.key == 'Down'):  app.direction = (+1, 0)
+    elif (event.key == 'Left'):  app.direction = (0, -1)
+    elif (event.key == 'Right'): app.direction = (0, +1)
+
+def timerFired(app):
+    if app.gameOver or app.waitingForFirstKeyPress: return
+    takeStep(app)
+
+def takeStep(app):
+    (drow, dcol) = app.direction
+    (headrow, headcol) = app.snake[0]
+    (newrow, newcol) = (headrow + drow, headcol +dcol)
+    if ((newrow < 0) or (newrow >= app.rows) or
+        (newcol < 0) or (newcol >= app.cols) or
+        ((newrow, newcol) in app.snake)):
+        app.gameOver = True
+    else:
+        app.snake.insert(0, (newrow, newcol))
+        if (app.foodPosition == (newrow, newcol)):
+            placeFood(app)
+        else:
+            # didn't eat, so remove old tail (slither forward)
+            app.snake.pop()
+    
+    def placeFood(app):
+    # Keep trying random positions until we find one that is not in
+    # the snake. Note: there are more sophisticated ways to do this.
+    while True:
+        row = random.randint(0, app.rows-1)
+        col = random.randint(0, app.cols-1)
+        if (row,col) not in app.snake:
+            app.foodPosition = (row, col)
+            return

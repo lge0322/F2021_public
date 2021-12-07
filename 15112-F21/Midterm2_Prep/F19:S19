@@ -1,0 +1,233 @@
+class HappyListState(object):
+    def __init__(self, list,solution):
+        self.solution = solution
+        self.list = list
+    
+    def getList(self):
+        return self.solution
+
+class HappyListSolver(object):
+    def __init__(self, list, cur):
+        super().__init__(list)
+        self.startState = list[0]
+        
+
+    def isSolutionState(self, state):
+        for elem in self.list:
+            if self.list.count(elem) != 1:
+                return False
+        index = self.list.find(state)
+        if self.list[index+1] % 2 == self.list[index] % 2:
+            return False
+        if abs(self.list[index+1] - self.list[index]) < 2:
+            return False
+        return True
+
+    
+    def getLegalMoves(self, state):
+        if isSolutionState(state):
+            self.startState = state
+
+   
+        
+class Play(object):
+    def __init__(self, name, scene):
+        self.name = name
+        self.scene = scene
+        self.number = 1
+    
+    def __repr__(self):
+        return f'Play<{self.name},{self.scene}>'
+
+    def getStatus(self):
+        if self.number > self.scene:
+            return "Show is done"
+        return f'On Scene {self.number}'
+
+    def sceneChange(self):
+        self.number += 1
+    
+    def __eq__(self, other):
+        return (isinstance(other, Play) and self.name == other.name and
+                    self.scene == other.scene)
+    
+class Musical(Play):
+    def __init__(self, name, scene, song):
+        super().__init__(name, scene)
+        self.song = song
+        self.number = 1
+    
+    def getStatus(self):
+        if self.number in self.song:
+            return f'On Scene {self.number}, with music!'
+        else:
+            return f'On Scene {self.number}'
+    
+    def skipToSong(self):
+        res = 0
+        for elem in self.song:
+            if elem > self.number:
+                res = elem
+                break
+        self.number = elem
+    
+def testPlay():
+    # A play has a name and a number of scenes
+    p1 = Play("Our Town", 34)
+    assert(str(p1) == "Play<Our Town,34>")
+    p2 = Play("The Crucible", 5)
+    assert(str(p2) == "Play<The Crucible,5>")
+    print('ya', p1.getStatus)
+    # A play begins on Scene 1, and can change scenes
+    assert(p1.getStatus() == "On Scene 1")
+    p1.sceneChange()
+    assert(p1.getStatus() == "On Scene 2")
+    # When it reaches the end, it should say so
+    for i in range(32): p1.sceneChange()
+    assert(p1.getStatus() == "On Scene 34")
+    p1.sceneChange()
+    assert(p1.getStatus() == "Show is done")
+    assert(p1 == Play("Our Town", 34) and p1 != Play("Almost, Maine", 34))
+    assert(p1 != "Our Town")
+    #s = { Play("Our Town", 34) }
+    
+    
+    #assert((p1 in s) and (p2 not in s))
+    # A Musical is a Play that has a song list:
+    # a sorted list of scenes where songs occur
+    m1 = Musical("Beauty and the Beast", 14, [2,5,6,7,8,10,11,12,13,14])
+    assert(str(m1) == "Play<Beauty and the Beast,14>")
+    # A musical can do everything a play can do - with music!
+    assert(m1.getStatus() == "On Scene 1")
+    m1.sceneChange()
+    print('yay', m1.getStatus())
+    assert(m1.getStatus() == "On Scene 2, with music!")
+    # A musical can also skip forward to the next scene with a song
+    m2 = Musical("Test Case: The Musical", 12, [4,9])
+    m2.skipToSong()
+    assert(m2.getStatus() == "On Scene 4, with music!")
+    m2.sceneChange()
+    assert(m2.getStatus() == "On Scene 5")
+    m2.skipToSong()
+    assert(m2.getStatus() == "On Scene 9, with music!")
+    # If you're on the last musical scene, don't skip forward!
+    m2.skipToSong()
+    assert(m2.getStatus() == "On Scene 9, with music!")
+    print('passed!')
+testPlay()
+
+
+def ct1(L):
+    if (len(L)==0):
+        return []
+    else:
+        return [max(L)]+ct1(L[1:-1])+[min(L)]
+print(ct1([1,2,3,2,1]))
+
+
+def ct2(s, depth=0):
+ if len(s) == 0:
+  return ""
+ else:
+  result = ct2(s[1:], depth+1)
+  if s[0] in "aeiou":
+   result = s[0] + result
+  elif s[0] not in result:
+   result = result + s[0]
+  print(depth, "out", result)
+ return result
+print(ct2("start"))
+
+def ct1(lst,x):
+ L=0
+ R=len(lst)-1
+ while L<=R:
+  i=(L+R)//2
+  if lst[i]==x:
+   return i
+  elif lst[i]<x: 
+   L=i+1
+  else:
+   R=i-1
+  print(lst[L:R+1])
+ return -1
+lst=[1,2,3,5,7,8,10,12,12,14,17]
+print(ct1(lst,11))
+
+class Vehicle(object):
+    def __init__(self, name, year):
+        self.name = name
+        self.year = year
+        self.counts = dict()
+        self.counts[self.name] = 1 + self.count.get(self.name, 0)
+
+class Car(Vehicle):
+    def __init__(self, name, year):
+        super().__init__(name, year)
+
+
+    def __repr__(self):
+        return f'{self.name} car built in {self.year}'
+    def __eq__(self, other):
+        return (isinstance(other, Car) and self.name == other.name and
+                    self.year == other.year)
+
+class Truck(Vehicle):
+    def __init__(self, name, year):
+        super().__init__(name, year)
+    
+    def __repr__(self):
+        return f'{self.name} truck built in {self.year}'
+    def __eq__(self, other):
+        return (isinstance(other, Truck) and self.name == other.name and
+                    self.year == other.year)
+
+
+def testVehicleAndSubclasses():
+ print('Testing Vehicle and Subclasses...', end='')
+ v1 = Car('Honda', 2014)
+ assert(isinstance(v1, Car) and
+ isinstance(v1, Vehicle)) # all cars are vehicles!
+ assert(str([v1]) == '[Honda car built in 2014]')
+ v2 = Car('Honda', 2014)
+ v3 = Car('Honda', 2019)
+ v4 = Car('Chevy', 2014)
+ assert((v1 == v2) and (v1 != v3) and (v1 != v4) and (v1 != 'Dont crash!'))
+ v5 = Truck('Honda', 2014)
+ assert(isinstance(v5, Truck) and
+ isinstance(v5, Vehicle) and # all trucks are vehicles
+ not isinstance(v5, Car)) # but trucks are not cars
+ assert(str(v5) == 'Honda truck built in 2014')
+ assert(v5 != v1) # cars do not equal trucks!
+ assert(Vehicle.counts == { 'car':4, 'truck':1 }) # this is a dictionary!
+ v6 = Truck('Honda', 2014)
+ print(Vehicle.counts)
+ assert(Vehicle.counts == { 'car':4, 'truck':2 })
+ s = { v4, v6 }
+ assert((v4 in s) and (v5 in s) and (v6 in s))
+ assert((v1 not in s) and (v2 not in s) and (v3 not in s))
+ print('Passed!')
+#testVehicleAndSubclasses()
+
+def combineInts(lst):
+    if len(lst) == 0: return {0}
+    x = lst[0]
+    subResults = combineInts(lst[1:])
+    result = set()
+    for subRes in subResults:
+        result.add(subRes - x)
+        result.add(subRes + x)
+    return result
+
+def testCombineInts():
+    print('Testing combineInts...')
+    assert(combineInts([5]) == {-5, 5})
+    assert(combineInts([1, 5]) == {-6, -4, 4, 6})
+    assert(combineInts([1, 5, 10]) == {4, 6, 14, -16, 16, -14, -6, -4})
+    assert(combineInts([]) == {0})
+    print('passed!')
+testCombineInts()
+
+            
+
+        
