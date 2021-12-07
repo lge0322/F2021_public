@@ -1,0 +1,85 @@
+def mostPopularFriends(d):
+    friendCounts = makeFriendCounts(d)
+    bestFriend = ""
+    bestCount = 0
+    for friend in friendCounts:
+        count = friendCounts[friend]
+        if bestFriend == "" or count > bestCount:
+            bestCount = count
+            bestFriend = friend
+    return bestFriend
+
+def makeFriendCounts(d):
+    result = dict()
+    for person in d:
+        for friend in d[person]:
+            result[friend] = result.get(friend, 0) + 1
+    return result
+
+class IceCream(object):
+    def __init__(self, flavors):
+        self.flavors = flavors
+        self.scoops = 2
+        self.seen = set()
+    
+    def addFlavors(self, name):
+        if not name in self.flavors:
+            self.flavors.append(name)
+            self.seen.add(name)
+    
+    def addScoop(self):
+        self.scoops += 1
+
+    def combine(self, other):
+        result = IceCream(self.flavors)
+        result.scoops = self.scoops + other.scoops
+        for item in self.flavors:
+            if not item in result.seen:
+                result.seen.add(item)
+                result.flavors.append(item)
+
+        for otherFlavor in other.flavors:
+            if not otherFlavor in result.seen:
+                result.seen.add(otherFlavor)
+                result.flavors.append(otherFlavor)
+        
+        return result
+    
+    def eat(self):
+        if self.scoops > 0:
+            self.scoops -= 1
+        else:
+            return 'no more ice cream'
+
+
+
+
+def testIceCreamClass():
+ print("Testing Ice Cream Class ...", end = " ")
+ c1 = IceCream(['Vanilla']) # Make a vanilla IceCream - yum!
+ assert(c1.flavors == ['Vanilla'])
+ assert(c1.scoops == 2) # IceCream objects always begin with 2 scoops
+ c1.addFlavors("Strawberry") # We can add a flavor
+ assert(c1.flavors == ['Vanilla', 'Strawberry'])
+ c1.addFlavors("Strawberry") # but we can only add any given flavor once!
+ assert(c1.flavors == ['Vanilla', 'Strawberry'])
+ c1.addScoop() # add a scoop
+ assert(c1.scoops == 3)
+ c2 = IceCream(['Pepperoni'])
+ c3 = IceCream(['Paprika', 'Pepperoni'])
+ # We can combine two IceCream objects to make a new IceCream!
+ c4 = c2.combine(c3)
+ # The new IceCream has no duplicate flavors; we only keep the first
+ # occurrence of a flavor (looking at c2’s flavors list first)
+ assert(c4.flavors == ['Pepperoni', 'Paprika'])
+ assert(c4.scoops == 4) # sum of the original IceCream objects' scoops
+ # What’s the point in making ice cream if you can't eat it?
+ c4.eat() # consume one scoop
+ assert(c4.scoops == 3)
+ for i in range(3): # eat up all the scoops
+    assert(c4.eat() == None)
+ # When all the scoops have been eaten, return a message
+    assert(c4.eat() == 'no more ice cream')
+ print("Passed!")
+testIceCreamClass()
+

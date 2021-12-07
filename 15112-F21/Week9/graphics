@@ -1,0 +1,35 @@
+   r = app.width // 3.5
+    canvas.create_oval(app.width//2-r,app.height//1.5-r,app.width//2+r, 
+                            app.height//1.5+r, fill= 'brown', outline = 'black',
+                                width = 10)
+    xEye1, xEye2 = app.width//2 - app.width//9, app.width//2 + app.width//9
+    yEye = app.height//2 + app.width//20
+    newR = app.width // 22
+    canvas.create_oval(xEye1-newR, yEye-newR, xEye1+newR, yEye+newR,
+                            fill= 'black')
+    canvas.create_oval(xEye2-newR, yEye-newR, xEye2+newR, yEye+newR,
+                            fill= 'black')
+    xLips, yLips =  app.width//2, app.height // 2 + app.height //3.8
+    lipsR = app.width//7
+    canvas.create_oval(xLips-lipsR,yLips-lipsR, xLips+lipsR, yLips+lipsR, 
+                            fill='navajo white3', outline = 'black', width = 6)
+    noseR = app.width // 22
+    canvas.create_oval(app.width//2-noseR,
+                            app.height//1.5-noseR+app.height//30,
+                            app.width//2+noseR, 
+                            app.height//1.5+noseR+app.height//30, fill= 'black')
+    newLipsR = lipsR//4
+    xNewLips1 = app.width // 2 - app.width // 25
+    xNewLips2 = app.width // 2 + app.width // 28
+    yNewLips = app.height // 2 + app.height //3.3
+    canvas.create_arc(xNewLips1-newLipsR, yNewLips-newLipsR, 
+                            xNewLips1+newLipsR, yNewLips+newLipsR, 
+                            start=180, extent=180, style=tk.ARC, width=6)
+    canvas.create_arc(xNewLips2-newLipsR, yNewLips-newLipsR, 
+                            xNewLips2+newLipsR, yNewLips+newLipsR, 
+                            start=180, extent=180,style=tk.ARC, width=6)
+    if level <= 0: return
+    else:
+        level -= 1
+        drawFractal(app, canvas, level-1, otherParams) #left ear
+        drawFractal(app, canvas, level-1, otherParams) #right ear

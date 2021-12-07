@@ -1,0 +1,63 @@
+###################################################
+import copy 
+L = [[1, 2, 3], 
+     [4, 5, 6],
+     [7, 8, 9]]
+
+
+#print(L)
+
+#print(L[0]) # giving the value of the row
+
+#It's perfectly fine even if there are more columns in a row than the other
+
+################################################################################
+
+rows = 3
+cols = 4
+L = [[0]*cols] * rows
+L[0][2] = 7 #row = 0, column = 2
+
+#for row in L:
+    #print(row)
+
+#even though we want a value at row 0, column 2, 
+#we can 3 7s, since all of the rows are alias to each other
+
+###################
+
+rows = 3
+cols = 4
+
+L = []
+for r in range(rows):
+    L.append([0]*cols)
+
+A = copy.copy(L) #it's still gonna print 7
+L[0][2] = 7
+
+#print(L)
+
+#creating three different lists
+
+#copy.deepcopy()
+
+
+
+Res = [[23,4,2], [23,5,6]]
+print(Res.count(23))
+
+    #first we have to check if the numbers <= row*col
+    
+    
+    
+    #then, check if the moves are legal
+    #pattern = 
+
+
+
+    #when row 0, (0 or 4) can go to 3 directions
+    #when row 1, (0 or 4)can go to 5 
+    #when row 2,(0 or 4) can go to 5
+    #when row 3,(0 or 4) can go to 3
+    #

@@ -1,0 +1,88 @@
+#use helper functions
+#animations (애니메이션  공부하기)
+import random
+
+def appStarted(app):
+    app.rows = 12
+    app.cols = 12
+    app.margin = 5
+    app.snake = [(1,3), (2,2), (2,3), (1,2)]
+    app.direction = "Up" #, "Down", "Right", "Left"
+    app.food = (6, 6)
+    app.Gameover = False
+    resetGame(app)
+
+def resetGame(app):
+    app.snake = [(1,3), (1,2), (2,2), (3,2)]
+    placeFood(app)
+    app.Gameover = False
+    app.direction = "Right"
+
+
+def drawFood(app, canvas):
+    row, col = app.food
+    (x0, y0, x1, y1) = getCellBounds(app, row, col)
+    fill = 'charteuse'
+
+
+def getDrowDcol(s):
+    if s == "Up":
+        return (-1, 0)
+    elif s == "Down":
+        return (1, 0)
+    elif s == "Right":
+        return (0, 1)
+    elif s == "Left":
+        return (0, -1)
+    return None
+
+def getCellBounds():
+    return 42
+
+def keypressed(app, event):
+    if event.key == 'r':
+        resetGame(app)
+    d = getDrowDcol(event.key)
+    if d == None:
+        return #doing nothing
+    app.dir = d
+    takeStep(app)
+
+def takeStep(app):
+    drow, dcol = app.dir # getDrowDcol(app)
+    headRow, headCol = app.snake[0]
+    newRow, newCol = (headRow+drow, headCol+dcol)
+    app.snake.insert(0, (newRow, newCol))
+    if ((newRow < 0 or newCol < 0) 
+            or newRow >= app.rows or newCol >= app.col
+            or ((newRow, newCol) in app.snake)):
+        app.Gameover = True
+    else:
+        if (newRow, newCol) == app.food:
+            placeFood(app)
+        else:
+            app.snake.pop()
+
+
+def placeFood(app):
+    
+    while app.food in app.snake:
+        newRow = random.randint(0, app.rows-1)
+        newCol = random.randint(0, app.cols-1)
+        #for randInt, 2nd input is inclusive
+        #for exclusive 2nd input, use randrange
+        app.
+
+#newRow = random.randiant(0, app.rows)
+#newCol = random.randiant(0, app.cols)
+#app.food = newRow, newCol
+
+def redrawAll(app, canvas):
+    drawGrid(app, canvas)
+    drawSnake(app, canvas)
+    drawFood(app, canvas)
+    if app.Gameover:
+        drawGameover(app, canvas)
+
+def drawGameover(app, canvas):
+    canvas.create_text(app.width / 2, app.height / 2, text = 'something')

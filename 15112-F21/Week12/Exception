@@ -1,0 +1,25 @@
+print("This is a demonstration of the basics of try/except")
+
+try:
+    print("Here we are just before the error!")
+    print("1/0 equals:", (1/0))
+    print("This line will never run!")
+
+except:
+    print("***We just caught an error. ***")
+print("And that concludes our demonstration")
+
+while True:
+    x = input('Give me a number')
+    print(f'x * 10 == {int(x) * 10}')
+
+
+    try:
+        for i in range(5):
+            for j in range(10):
+                print(f'10/x == {10/int(i+2-j)}')
+    except Exception as e:
+        print('Haha')
+        print(f'         {e}')
+
+

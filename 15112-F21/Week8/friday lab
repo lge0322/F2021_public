@@ -1,0 +1,91 @@
+###############################################################################
+
+#Cake Class#
+
+# 1. write def class
+
+###############################################################################
+
+class Cake(object):
+    def __init__(self, flavor):
+        self.flavor = flavor
+        self.packaging = 'paper'
+        self.toppings = []
+
+    def __eq__(self, other):
+        return (type(self) == type(other) and 
+                self.flavor == other.flavor and self.cake == other.cake)
+    def __repr__(self):
+        return f'{self.flavor} cake'
+    
+    def __hash__(self):
+        return hash(self.flavor)
+    
+    def addTopping(self, topping):
+        self.toppings.append(topping)
+    
+    def getNumToppings(self):
+        return len(self.toppings)
+    
+    def sameToppings(self, other):
+        #m = len(other.toppings)
+        result = set()
+        otherSet = set(other.toppings) #0(M)
+        for topping in self.toppings: # 0(N)
+            if topping in otherSet: #0(1)
+                result.add(topping) #0(1)
+        return result #0(N)
+        #worst case --> 0(M+N)
+#time.time --> 0(N) when N = 100 and N = 1000, the time taken should be 
+#roughly 10 times.
+
+    def addNewToppings(self, other):
+        if isinstance(other, self.cake):
+            self.toppings.extend(other.toppings)
+    
+class FruitCake(Cake):
+    def addTopping(self, topping):
+        if len(self.toppings) < 2:
+            self.toppings.append(topping)
+    
+    def __repr__(self):
+        return f"No one likes {self.flavor} fruitcakes"
+
+def testCakeClass():
+    print('Testing Cake Class Part One...', end = '')
+    cake = Cake("Vanilla")
+    assert(cake.packaging == 'paper')
+
+    for i in range(3):
+        cake.addTopping("Almonds")
+    assert(cake.toppings == ["Almonds", "Almonds", "Almonds"])
+    assert(cake.getNumToppings() == 3)
+
+    choco = Cake("Chocolate")
+    choco.addTopping("Blueberries")
+    choco.addTopping("Oreos")
+    assert(choco.toppings == ["Blueberries", "Oreos"])
+    assert(cake.sameToppings(choco) == set())
+    choco.addTopping("Almonds")
+    choco.addTopping("Almonds")
+    print(choco)
+    assert(cake.sameToppings(choco) == "Almonds")
+    
+    assert(str(cake) == "Vanilla Cake")
+    assert(str(choco) == "Chocolate Cake")
+
+    appleFruitCake = FruitCake("Apple")
+    assert(isinstance(appleFruitCake, Cake))
+    appleFruitCake.addTopping("Peanut butter")
+    appleFruitCake.addTopping("Ranch")
+    assert(appleFruitCake.toppings == ["Peanut butter", "Ranch"])
+    appleFruitCake.addTopping("Tomatoes")
+    assert(appleFruitCake.toppings == ["Peanut butter", "Ranch"])
+    assert(str(appleFruitCake) == "No one likes Apple Fruitcakes")
+
+
+
+testCakeClass()
+#cake Toppings: almonds, almonds, almonds
+#choco toppings: blueberries, oreos
+

@@ -1,0 +1,14 @@
+def f(x):
+    return 3*x - 2
+def g(x):
+    print(x)
+    return f(x + 5)
+def ct3(x):
+    print(f(x-2))
+    x -= 2
+    print(g(x))
+    x %= 4
+    print((g(x) % 6) // 2)
+print(ct3(4))
+
+print(2%4)

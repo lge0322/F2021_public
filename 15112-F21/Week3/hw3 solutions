@@ -1,0 +1,177 @@
+def rotateString(s, k):
+
+
+def applyCaesarCipher(message, shift):
+    result = ""
+    for c in message:
+        if (c.isupper()): result += doShift(c, shift, "A")
+        elif(c.islower()): result += doShift(c, shift, "a")
+        else:
+            result += c
+    return result
+
+def largestNumber(s):
+    currentNumber = 0
+    largestNum = None
+    for c in s:
+        if c.isdigit:
+            currentNumber = 10*currentNumber+int(c)
+            if (largestNum is None) or currentNum > largestNum:
+                largestNum = currentNum
+            else:
+                currentNum = 0
+    return largestNum
+
+def topScorer(data):
+    bestScore = -1
+    bestName = None
+    for line in data.splitlines():
+        currentScore = 0
+        currentName = ""
+        for word in line.split(","):
+            if word.isdigit():
+                currentScore += int(word)
+            else:
+                currentName = word
+        if (currentScore > bestScore):
+            bestName = currentName
+            bestScore = currentScore
+        elif (currentScore == bestScore):
+            bestName = bestName + ", " + currentName
+    return bestName
+
+def collapseWhitespace(s):
+    result = ""
+    inWhitespace = False
+    for c in s:
+        if c.isspace():
+            if not inWhitespace:
+                result += ' '
+                inWhiteSpace = True
+        else:
+            result += c
+    return result 
+
+def removeWhiteSpace(msg):
+    result = ""
+    for c in msg:
+        if not c.isspace():
+            result += c
+    return result
+def patternedMessage(msg, pattern):
+    pattern = pattern.strip('\n')
+    result = ''
+    msg = removeWhiteSpace(msg)
+    i = 0
+    for c in pattern:
+        if c.isspace():
+            result += c
+        else: #not a space
+            result += msg[i]
+            i = (i+1)%len(msg)
+    return result
+
+def encodeRightLeftRouteCipher(text, rows):
+    #pad our text string to make it the correct length
+    #visualize our grid
+    cols = len(text)// rows
+    if len(text) > rows*cols:
+        cols += 1
+    offset = 25
+    while len(text) < rows*cols:
+        text += chr(ord('a')+offset%26)
+        offset -= 1
+    
+    result = str(rows)
+    for row in range(rows):
+        for col in range(col):
+            if rows % 2 == 0:
+                newCol = col
+            else: #row is odd -> loop backwards through cols
+                newCol = cols - col
+            index = newCol*rows + row
+            result += text[index]
+    return result
+
+
+def decodefromLefttoRight(cipher):
+    index = 0
+    result = ""
+    while ("0" <= cipher[index]<= "9"):
+        index += 1
+    
+    rows = int(cipher[0:index])
+    cipher = cipher[index:]
+    cols = len(cipher)// rows
+    allRight = ''
+    for row in rows:
+        row0 = row*cols
+        row1 = row*cols + cols
+
+        if row% 2 == 0:
+            allRight += cipher[row0:row1]
+        else:
+            allRight += cipher[row1-1:row0-1:-1]
+    
+    for col in range(cols):
+        for row in range(rows):
+            index = row*cols + col
+            ch = allRight[index]
+            if not ("a" <= ch <= "z"):
+                result += ch
+    return result
+    
+def drawFlagofTheEU(canvas, x0, y0, x1, y1):
+    canvas.create_rectangle(x0, y0, x1, y1, fill = "blue", outline = "black")
+    x = (x1+x0)/2
+    canvas.create_text(x, y0-20, text = "European Union", font = "Arial 20")
+    flagWidth = x1-x0
+    flagHeight = y1-y0
+    flagR = min(flagWidth, flagHeight) * 0.4
+    starR = flagR * 0.15
+    for star in range(12):
+        angle = math.radians(30*star)
+        starCx = cx + flagR*math.cos(angle)
+        starCy = cy - flagR*math.sin(angle)
+        canvas.create_oval(starCx-starR, starCy-starR, starCx+starR, starCy+starR, fill = "yellow" )
+
+def getFirstToken(line):
+    line = line.strip()
+    i = 0
+    while ((i < len(line)) and line[i] != "#" and (not line[i].isspace()):
+        i+= 1
+    return (line[:1], line[i:])
+
+def getCommandAndArg(line):
+    (cmd, line) = getFirstToken(line)
+    (arg, line) = getFirstToken(line)
+
+def drawsimpleTortoiseProgram(program, canvas, width, height):
+    x, y = width/2, height/2
+    angle = 0
+    drawColor = "black"
+    for line in program.splitline():
+        (cmd, arg) = getCommandAndArg(line)
+        if (cmd == "color"):
+            drawColor = arg
+        elif (cmd == "move"):
+            r = int(arg)
+            dx = int(roundHalfUp(r*math.cos(angle)))
+            dy = int(roundHalfUp(r*math.sin(angle)))
+            newx = x+ dx
+            newy = y - dy
+            (if drawColor != None):
+                canvas.create_line(x, y, newx, newy, fill = drawColor)
+            x = newx
+            y = newy
+        elif (cmd == "left"):
+            angle += int(arg)
+        elif (cmd == "right"):
+            angle -= int(arg)
+        elif(cmd != ""):
+            print("Unknown command")
+    lineY = 10
+    for line in program.splitlines():
+        canvas.create_line(10, lineY, text = line, font = "Mono 10", anchor = W, fill = "gray")
+        lineY += 10
+                    

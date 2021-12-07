@@ -1,0 +1,86 @@
+for x in range(0,4):
+    print('hi')
+    print(x)
+
+for x in range(0, 100):
+    print(x)
+
+# does not include 100 
+
+for x in range(0, 100, 2):
+    print(x)
+
+# starts from zero and '2' means a step size
+# does not print 100
+
+def printEvens(m, n):
+    for x in range(m,n):
+        if x % 2 ==0:
+            print(x)
+        print('yay?') 
+printEvens(10, 100)
+
+def printSomething(m, n):
+    for x in range (m,n):
+        for y in range(m,n):
+            print(f"({x}, {y})")
+        print("Done with y loop")
+
+def print_Something(m , n):
+    for x in range (m,n):
+        for y in range(m,n):
+            print(f"({x}, {y})", end ="")
+    print() #creating a new line
+
+def print__Something(m,n):
+    for x in range(m,n):
+        for y in range(x):
+            print("x", end =' ')
+        print()
+
+print__Something(0, 5)
+
+#While loop
+
+while x < 10:
+    print(x)
+
+# runtime error --> did not define the error
+x = 1
+while x < 10:
+    print(x)
+    x += 1
+print(f"done: {x}")
+
+def leftmostDigit(n):
+    n = abs(n)
+    while n >= 10:
+        n //= 10
+    return(n) #not here
+
+print(leftmostDigit(2348572))
+
+def isPrime(n):
+    if n < 2:
+        return False
+    for factor in range(2, n):
+        if n % factor == 0:
+            return False
+        return True
+    
+print(isPrime(80))
+
+def nthPrime(n):
+    guess = 0
+    found = 0
+    while found <= n:
+        guess += 1
+        if isPrime(guess):
+            found+=1
+    return guess
+    
+print(nthPrime(50))
+
+
+
+#############################################

@@ -1,0 +1,39 @@
+def wordSearchFromCell(board, word, startRow, startCol):
+    for drow in [-1, 0, +1]:
+        for dcol in [-1, 0, +1]:
+            if (drow, dcol) != (0, 0):
+                result = wordSearchFromCellInDirection(board, word,
+                                                       startRow, startCol,
+                                                       drow, dcol)
+                if (result != False):
+                    print('the primary result is', result)
+                    return True
+    return False
+
+def wordSearchFromCellInDirection(board, word, startRow, startCol, drow, dcol):
+    (rows, cols) = (len(board), len(board[0]))
+    res = [board[row][col] for row in range(rows) for col in range(cols)]
+    wildcard = []
+    for letter in word:
+        if letter not in res:
+            wildcard.append(letter)
+
+    for i in range(len(word)):
+        print('len(word) is', len(word))
+        print('word is', word)
+        row = startRow + i*drow
+        print('drow is', drow)
+        col = startCol + i*dcol
+        if (board[row][col] != word[i]):
+            print('board row col', board[row][col])
+            if isinstance(board[row][col], int) == True:
+                if len(wildcard) == board[row][col]:
+                    return True
+                else:
+                    return False
+            else:
+                return False
+        if ((row < 0) or (row >= rows) or
+            (col < 0) or (col >= cols)):
+            return False
+    return True

@@ -1,0 +1,8 @@
+import math
+def numPizzas(tas, slicesEach):
+    if not isinstance(tas, int) or not isinstance(slicesEach, int):
+        return None
+    if not tas>0 or not slicesEach>0:
+        return None
+    return math.ceil((slicesEach * tas) / 8)*8
+print(numPizzas(4,3))

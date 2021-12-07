@@ -1,0 +1,38 @@
+#int division 
+#print(123/10) --> divison, giving a float value
+#print(123//10) --> giving an int value
+
+#module
+# ex) print(12%4) --> 0
+#print(123456789%10) --> 9 (since it cannot take 9)
+
+def f(x,y):
+    if x // y ==2:
+        print(' yay')
+    else:
+        print(' nope ')
+f(10,3)
+
+#short circuit evaluation
+
+#(True and False) -> False, (False or True) --> True
+
+def f(x,y):
+    if y!=0 and x // y ==2:
+        print(' yay')
+    else:
+        print(' nope ')
+f(10,3)
+
+#False or _______ --> 
+#True or _____ --> the line will evaluate 'True' instead of the later one
+
+#Hence, False or ________ creates an error
+
+# ** Order matters a lot in Python ** #
+
+a = 9.6
+x = str(a)
+print(isinstance(x, str))
+print(x+5) --> Error
+print(x+'5') --> str + str works

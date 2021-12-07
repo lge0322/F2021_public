@@ -1,0 +1,229 @@
+def sumFroMTon(m,n):
+    total = 0
+    for x in range (m, n+1):
+        total += x
+    return total
+
+print(sumFroMTon(5, 10) == 5+6+7+8+9+10)
+
+#More efficient way:
+
+def sumFroMTon(m, n):
+    return sum(range(m, n+1))
+
+def sumToN(n):
+    #helper function
+    return n*(n+1)//2
+
+def sumFroMTon_byFormula(m, n):
+    return (sumToN(n) - sumToN(m-1))
+
+print(sumFroMTon_byFormula(5, 10) == 5+6+7+8+9+10)
+
+def sumOfOddsFromToN(m, n):
+    total = 0
+    for x in range(m, n+1):
+        if(x % 2 == 1):
+            total += x
+    return total
+
+print(sumOfOddsFromToN(4, 10) == sumOfOddsFromToN(5, 9) == 5+7+9)
+
+#Nested for loops
+
+def printCoordinates(xMax, yMax):
+    for x in range(xMax+1):
+        for y in range(yMax+1):
+            print("(", x, ",", y, ") ", end="")
+        print()
+
+printCoordinates(4, 5)
+
+def printStarRectangle(n):
+    for row in range(n):
+        for col in range(n):
+            print("*", end= "")
+        print()
+
+printStarRectangle(5)
+
+def printMysteryStarShape(n):
+    for row in range(n):
+        print(row, end= "")
+        for col in range(row):
+            print("*", end = "")
+        print()
+
+print(printMysteryStarShape(5))
+
+#while loops
+
+def leftmostDigit(n):
+    n = abs(n)
+    while (n>= 10):
+        n //= 10
+    return n
+
+print(leftmostDigit(72847892792834623) == 7)
+
+def isMultipleOf4or7(x):
+    return ((x%4) == 0) or ((x%7)==0)
+
+def nthMultipleOf4or7(n):
+    found = 0
+    guess = -1
+    while (found <= n):
+        guess += 1
+        if (isMultipleOf4or7(guess)):
+            found += 1
+    return guess
+
+print("Multiples of 4 or 7: ", end="")
+for n in range (15):
+    print(nthMultipleOf4or7(n), end= "")
+
+print()
+
+def isPrime(n):
+    if n < 2:
+        return False
+    for factor in range(2, n):
+        if n % factor == 0:
+            return False
+    
+    return True
+
+def countdigit(n):
+    count = 0
+    while n > 0:
+        n //= 10
+        count += 1
+    return count
+
+def evenorodd(n):
+    even = 0
+    odd = 0
+    for i in range(countdigit(n)):
+        n %= 10
+        n %= 2
+        if n == 1:
+            odd += 1
+        elif n == 0:
+            even += 1
+        n //= 10
+        if even == 2 or odd == 2:
+            return False
+        break
+    return True
+
+def nthSnarfPrime(n):
+    if n == 0:
+        return 23
+    if n < 0: return False
+    if n < 100:
+        return False
+    if not isPrime(n):
+        return False
+    if not evenorodd(n):
+        return False
+    return True
+    
+
+def testNthSnarfPrime():
+    print('Testing nthSnarfPrime()...', end='')
+    assert(nthSnarfPrime(0) == 23)
+    assert(nthSnarfPrime(1) == 29)
+    assert(nthSnarfPrime(5) == 61)
+    assert(nthSnarfPrime(9) == 101)
+    print('Passed!')
+
+####틀림 사용금지##########
+def isSummish(n):
+    while n > 0:
+        ones = n%10
+        tens = n // 10 % 10
+        hundreds = n // 100 % 10
+        if ones == tens + hundreds:
+            ones = tens
+            tens = hundreds
+            break
+        else:
+            return False
+    return True
+print(isSummish(2358))
+####틀림 사용금지##########
+
+def nthSummish(n):
+    found = 0
+    guess = 1000
+    while found <= n:
+        guess += 1
+        if isSummish(guess):
+            found += 1
+    return guess
+print(nthSummish(4))
+
+        
+def ct1(x, y):
+  while (x > y):
+    x -= y
+    y -= 1
+  r = 0
+  for z in range(y):
+    r += z
+  return 100*x + r
+
+print(ct1(20, 7))
+
+def ct2(a, b, c):
+  r = 0
+  for x in range(a, b, c):
+    for y in range(x):
+      r = 10*r + y
+  return r
+
+print(ct2(0, 5, 2))
+
+def bonusCt1(n):
+  def f(n):
+    r,m = 0,n
+    while m>0:
+      r,m = r+m,m-1
+    return 2*r-n
+  def g(n):
+    return (f(n+1) -
+            f(n-1))
+  return f(g(n))
+
+print(bonusCt1(10))
+
+
+def digitCount(n):
+    count = 0
+    while n > 0:
+        n //= 10
+        count += 1
+    return count
+
+#####틀린 것 같은데 다시한번 확인해보기##########
+def isPalNumbers(n):
+    number = 0
+    while n > 0:
+        ones = n % 10
+        number = ones*10**(digitCount(n)-1)
+        n = n// 10
+        n %= 10
+        n *= 10**(countdigit(n)- 1)
+        number += n
+    return number == n
+#####틀린 것 같은데 다시한번 확인해보기##########
+def nthPalNumbers(n):
+    guess = 0
+    found = 0
+    while guess <= n:
+        guess += 1
+        if isPalNumbers(guess):
+            found += 1
+    return found
+
+print(nthPalNumbers(100))

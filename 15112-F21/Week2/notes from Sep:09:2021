@@ -1,0 +1,36 @@
+def isPrime(n):
+    if n < 2:
+        return False
+    for factor in range (2,n):
+        if n % factor == 0:
+            return False
+        else:
+            return True
+
+def nthPrime(n):
+    guess = 0
+    found = 0
+    while found <= n:
+        guess += 1
+        if isPrime(guess):
+            found+=1
+    return guess
+
+
+print(nthPrime(0)) #2
+print(nthPrime(1)) #3
+
+def NthPalindromeicPrime(n):
+    guess = 0
+    found = 0
+    while found <= n:
+        guess += 1
+        if isPrime(guess) and isPalindromic(guess):
+            found += 1
+    return guess
+
+for x in range(10):
+    for y in range(10):
+        if y == 5:
+            break
+    print(x,y)

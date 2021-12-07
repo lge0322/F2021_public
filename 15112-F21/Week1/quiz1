@@ -1,0 +1,180 @@
+#CT1
+
+import math
+def ct1(x):
+    if (type(x) != int):
+        x = 2 * x
+        return math.ceil(2 * float(str(x)))
+    x = abs(x)
+    if (x < 0):
+        return '0'
+    elif (x > 10):
+        return x/10
+print(ct1(-45))
+print(ct1(6))
+print(ct1(7.8))
+print(ct1('4'))
+
+#CT2
+
+def f(x):
+    print(f'f({x})') # Don't miss this line
+    return 10*x if (x < 25) else 10+x
+
+def ct2(x):
+    if (x % 5 < x % 10):
+        x += f(x + f(x))
+    return f(x)
+print(ct2(15) + ct2(20))
+# Hint: this prints 5 lines
+
+####################################
+
+#Free Response 1: isSmallFair(n) [60 pts]
+#We will say that a value n is "fair" if it is an integer and it has the same number of even digits as odd digits
+#(ignoring leading 0's). A "small fair" number is a fair number with exactly 4 digits.
+#For example, 1083, 1081, and -1092 are each small fair numbers because each have two odds and two evens.
+#With this in mind, and without using strings or loops, write the function isSmallFair(n) that takes a value n, that
+#may or may not be an integer, and returns True if n is a small fair number, and False otherwise. Do not crash
+#if n is not an integer! Again, do not use strings or loops here.
+
+def isSmallFair(n):
+    if not isinstance(n, int): return False
+    n = abs(n)
+    if (n < 1000) or (n > 9999): return False
+    evenCount = 0
+    oddCount = 0
+
+    ones_digit = n % 10
+    tens_digit = n // 10 % 10
+    hundreds_digit = n // 100 % 10
+    thousands_digit = n // 1000 % 10
+
+    if ones_digit % 2 == 0: evenCount += 1
+    else: oddCount += 1
+    if tens_digit % 2 == 0: evenCount += 1
+    else: oddCount += 1
+    if hundreds_digit % 2 == 0: evenCount += 1
+    else: oddCount += 1
+    if thousands_digit % 2 == 0: evenCount += 1
+    else: oddCount += 1
+
+    if evenCount != oddCount: return False
+    return True
+
+
+def testIsSmallFair():
+    assert(isSmallFair(1001) == True)
+    assert(isSmallFair(-1083) == True)
+    assert(isSmallFair(1112) == False)
+    assert(isSmallFair(83) == False)
+    assert(isSmallFair('axolotl') == False)
+    print('passed')
+testIsSmallFair()
+
+def ct1(x, y):
+ if x % 3 == 0 and (y % 2 == 0 or x/0 == 1):
+    print(x + y)
+    if y > 4 or x == 4:
+        print(y - x)
+        return False
+    else:
+        print(x*y)
+        return True
+ else:
+    print(x / y)
+    return False
+print(ct1(6, 8) or ct1(5, 1))
+
+
+def ct2(n):
+    x = 112
+    if (2 * n <= 15):
+        x = n // 2
+    if(1 / 10 + 2 / 10 != 3 / 10):
+        print("pass")
+    print(min(x, n), n // x, pow(x, max(n, x)))
+print(ct2(5))
+
+
+#don't forget None
+
+def f(x):
+ return 3*x - 2
+def g(x):
+ print(x)
+ return f(x + 5)
+def ct3(x):
+ print(f(x-2))
+ x -= 2
+ print(g(x))
+ x %= 4
+ print((g(x) % 6) // 2)
+print(ct3(4))
+
+
+#3. Free Response: isSevenish(n)
+#Write the function isSevenish(n) that takes in any Python value n and returns True if
+#n is a (possibly-negative) four-digit integer and the product of the digits of n is within 2 of
+#a multiple of 7. In all other cases, the function should return False.
+#For example:
+
+
+def isSevenish(n):
+    if not isinstance(n, int): return False
+    n = abs(n)
+    if (n < 1000) or (n > 9999): return False
+    (ones, tens, hundreds, thousands) = (n%10, n//10%10, n //100%10, n//1000)
+    product = ones * tens * hundreds * thousands
+    if (product % 7 <= 2) or (product % 7 >= 5): return True
+    return False
+
+def testIsSevenish():
+
+    assert(isSevenish(1357) == True) # 1*3*5*7 is a multiple of 7
+    assert(isSevenish(5312) == True) # 5*3*1*2 = 30, which is 2 below 28
+    assert(isSevenish(1315) == True) # 1*3*1*5 = 15, which is 1 above 14
+    assert(isSevenish(-2222) == True) # 2*2*2*2 = 16, which is 2 above 14
+    assert(isSevenish(1234) == False) # 1*2*3*4 = 24 is 3 above 21
+ # and 4 below 28
+    assert(isSevenish(777) == False) # 777 is not a 4 digit number
+    assert(isSevenish("sign up 4 puzzle hunt") == False) # not an integer
+    print('passed!')
+testIsSevenish()
+
+#4. Free Response: checkIntersect(m0, b0, m1, b1, cx, cy)
+#Write the function checkIntersect(m0, b0, m1, b1, cx, cy) that takes in one
+#line with slope m0 and y-intercept b0, another line with slope m1 and y-intercept b1, and
+#the coordinates cx and cy. In other words, we are given the following system of
+#equations:
+#y = m0 * x + b0
+#y = m1 * x + b1
+#You may assume that the function is always provided with integer inputs for m0, y0,
+#m1, and y1. However, you may not assume this is always the case for cx and cy.
+#If cx and cy are both integers, the function should return True if the lines intersect at
+#exactly (cx, cy) and False otherwise.
+#If cx and cy are not both integers, the function should instead return True if the lines
+#intersect at any point and False otherwise.
+#For example:
+
+def checkIntersect(m0, b0, m1, b1, cx, cy):
+    if m0 == m1: return False
+    if isinstance(cx, int) and isinstance(cy, int):
+        if m0 * cx + b0 == cy:
+            return True
+        else: return False
+    
+    else:
+        return True
+
+def testCheckIntersect():
+    print('testCheckIntersect....')
+    assert(checkIntersect(1, 3, -1, 7, 2, 5) == True)
+    assert(checkIntersect(1, 3, -3, 7, 1, 4) == True)
+    assert(checkIntersect(0, 3, 1, 4, 1, 4) == False)
+    assert(checkIntersect(1, 3, 1, 4, 1, 4) == False) # parallel lines
+    assert(checkIntersect(1, 2, 3, 4, "beep", "boop") == True)
+    assert(checkIntersect(1, 2, 1, 4, "mike", "koz") == False)
+    print('passed!')
+testCheckIntersect()
+#Hint: What if the two lines are parallel?

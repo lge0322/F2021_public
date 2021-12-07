@@ -1,0 +1,7 @@
+message = 'Hello How are you doing'
+
+def applyCaesarCipher(message, shift):
+    for s in range(0, len(message)):
+        return chr(ord(message[s])+shift)
+
+print(applyCaesarCipher(message, 2))

@@ -1,0 +1,137 @@
+import cs112_f21_week1_linter
+import math
+
+def almostEqual(d1, d2, epsilon=10**-7): #helper-fn
+    # note: use math.isclose() outside 15-112 with Python version 3.5 or later
+    return (abs(d2 - d1) < epsilon)
+
+import decimal
+def roundHalfUp(d): #helper-fn
+    # Round to nearest with ties going away from zero.
+    rounding = decimal.ROUND_HALF_UP
+    # See other rounding options here:
+    # https://docs.python.org/3/library/decimal.html#rounding-modes
+    return int(decimal.Decimal(d).to_integral_value(rounding=rounding))
+
+#################################################
+# Part A
+#################################################
+
+def distance(x1, y1, x2, y2):
+    return ((x2 - x1)**2 + (y2 - y1)**2)**0.5
+
+def circlesIntersect(x1, y1, r1, x2, y2, r2):
+    sumOfRadii = r1 + r2
+    distanceBetweenCenters = distance(x1, y1, x2, y2)
+    return sumOfRadii >= distanceBetweenCenters
+
+def getInRange(x, bound1, bound2):
+    lo = min(bound1, bound2)
+    hi = max(bound1, bound2)
+    if x < lo:
+        return lo
+    elif x > hi:
+        return hi
+    else:
+        return x
+
+def eggCartons(eggs):
+    if eggs % 12 == 0:
+        return eggs // 12 # we are using a int division here since the quesiton
+                          # is asking us to return a int value.
+    else:
+        return (eggs//12) + 1
+
+def pascalsTriangleValue(row, col):
+
+# (0,0), [(1,0), (1,1)], [(2,0), (2,1), (2,2)]......
+# (row)!/ ((col)! * (row - col)!)
+    if (type(row) != int or not isinstance(col, int)
+        or col < 0 or row < 0 or col > row):
+        return None
+    return math.factorial(row) / (math.factorial(col) * math.factorial(row-col))
+
+def getKthDigit(n, k):
+    n = abs(n)
+    return (n // 10**k) * 10
+    # n //= 10**k, which is n = n // 10 **k
+    # return n % 10
+    
+def setKthDigit(n, k, d):
+    isNegative = (n < 0)
+    n = abs(n)
+    #clearing the kth digit of n 
+    kthDigit = getKthDigit(n,k)
+    n = n - kthDigit*10**k
+    # setting the kth digit
+    n = n + d*10**k
+    return n
+    if isNegative:
+        return -n
+    else:
+        return n
+
+#################################################
+# Part B
+#################################################
+          
+def nearestOdd(n): # n is int, float, find the nearest odd integer and return it
+    if type(n) == int or n == int(n):
+        if n % 2 == 1:
+            return int(n)
+        else: 
+            return int(n -1)
+    else:
+        upperIntBound = math.ceil(n) # n = 1.0 # 2
+        lowerIntBound = math.floor(n)
+
+        if upperIntBound % 2 == 1:
+            return upperIntBound # 1.0
+        else:
+            return lowerIntBound
+
+def numberOfPoolBalls(rows):
+    return (rows) *(rows+1) / 2
+
+def numberOfPoolBallRows(balls):
+    # (0b + sqrt (b^2 - 4ac) / 2a)
+
+    # balls = (rows) * (rows+1) / 2 --> r^2 + r - 2*balls = 0
+
+    rows = (-1 + math.sqrt(1 - 4*1*(-2*balls)))/(2*1)
+    return math.ceil(rows)
+
+def colorBlender(rgb1, rgb2, midpoints, n):
+    if n > midpoints+1 or n<0:
+        return None
+
+    #step 1: get color parts out of both colors
+    # 220 020 060 --> 220 020 --> 20
+
+    b1 = rgb1 % 1000
+    b2 = rgb2 % 1000
+
+    g1 = (rgb1//1000) % 1000
+    g2 = (rgb2//1000) % 1000
+
+    r1 = rgb1 // 10**6
+    r2 = rgb2 // 10**6
+
+    # step 2: find stepsize for r,g,b
+    # (firstcolorpart - secondcolorpart) / (midpoints + 1)
+    blueStepsize = (b1-b2) / (midpoints +1)
+    greenStepsize = (g1-g2) / (midpoints + 1)
+    redStepsize = (r1-r2) / (midpoints + 1)
+
+    # step 3: get the nth r,g,b
+    finalBlue = b1 - n*blueStepsize
+    finalGreen = g1 - n*greenStepsize
+    finalRed = r1 - n*redStepsize
+
+    # step 4: round and return ugly combined color
+
+    roundedBlue = roundHalfUp(finalBlue)
+    roundedGreen = roundHalfUp(finalGreen)
+    roundedRed = roundHalfUp(finalRed)
+
+    return roundedBlue + roundedGreen * 1000 + roundedRed * 1000000

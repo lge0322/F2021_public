@@ -1,0 +1,78 @@
+#conditionals
+
+if (some condition):
+    do thing
+elif (some other conditional):
+    do a different thing
+else:
+    do something else
+
+def testSphereVolumeFromSurfaceArea():
+    print("Testing sphereVolumeFromSurfaceArea()...", end = " ")
+
+# In order to use math function, we need to 'import' math function
+
+import math
+
+def sphereVolumeFromSurfaceArea(area):
+    radius = math.sqrt(area / (4 * math.pi))
+    return 4 / 3 * math.pi * (radius**3)
+
+#another example
+
+# return True if f is a facotr of n
+# return False otherwise
+# speical case: f ==0 return True
+
+# remainder = 0 = n % f
+
+def isFactor(f, n):
+    if (n ==0): return True
+    if (f == 0): return False
+    if (n % f == 0): return True
+    else: return False
+
+# a number if factorish if:
+# 3 digits (can be negative)
+# no repeats
+# each digit is a factor of n
+
+def isFactorish(n):
+    if type(n) != int:
+        return False
+    n = abs(n)
+    #smallest number = 100, biggest number = 999
+    if n < 100 or n > 999:
+        return False
+    #n % 10
+    ones = n % 10
+    #412 % 10 = 2
+    # % 100 = 12
+    #412 // 10 = 41
+
+    tens = (n //10) % 10
+    hundreds = (n // 100) % 10
+    if ones == tens or tens == hundreds or ones == hundreds:
+        return False
+    return isFactor(ones, n) and isFactor(tens, n) and isFactor(hundreds, n)
+
+#code tracing
+
+def ct(x):
+    print(x)
+    if (x % 2 == 0):
+        print("hello")
+    elif (x % 2 == 0):
+        print("world?")
+    else:
+        print("world?") #elif & else are ignored
+    
+    x = (x//2 * 7) + 5
+    return x
+    print(x+5) #after the return statement, line 72 becomes a dead code.
+
+    #As a result, we are going to print 10, hello, 40
+
+    #with the absence of "return x", python will print None
+    
+

@@ -1,0 +1,9 @@
+def ct3(n):
+    if (n == 0):
+        return 'x'
+    elif (n == 1):
+        return 'y'
+    else:
+        return ct3(n//2) + str(n) + ct3(n//3)
+
+print(ct3(8))
